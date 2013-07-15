@@ -1,0 +1,9 @@
+localhost
+3306
+students
+student
+password
+
+-- sql
+slect * from something
+-- end
