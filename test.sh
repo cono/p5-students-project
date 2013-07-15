@@ -2,9 +2,11 @@
 
 BINDIR=$(dirname $0)
 
-for NUM in $(ls $BINDIR/noobs); do
+. $BINDIR/init.sh
+
+for NUM in $(ls $NOOBDIR); do
     # Model processing
-    MODELPL="$BINDIR/model/$NUM/${NUM}.pl"
+    MODELPL="$MODELDIR/$NUM/${NUM}.pl"
     if [ ! -e "$MODELPL" ]; then
 	echo "Task $NUM not completed"
 	continue
@@ -13,8 +15,8 @@ for NUM in $(ls $BINDIR/noobs); do
     # add executable bit for model script
     chmod +x "$MODELPL"
 
-    DATDIR="$BINDIR/model/$NUM/dat"
-    SOLDIR="$BINDIR/model/$NUM/sol"
+    DATDIR="$MODELDIR/$NUM/dat"
+    SOLDIR="$MODELDIR/$NUM/sol"
     [ -e "$SOLDIR" ] || mkdir "$SOLDIR"
 
     for TEST in $(ls $DATDIR); do
@@ -25,13 +27,12 @@ for NUM in $(ls $BINDIR/noobs); do
 	[ -e "$SOL" ] || $MODELPL $DAT >$SOL 2>$ERR
     done
 
-    for SCRIPT in $(ls $BINDIR/noobs/$NUM); do
-	NOOBPL="$BINDIR/noobs/$NUM/$SCRIPT"
+    for SCRIPT in $(ls $NOOBDIR/$NUM); do
+	NOOBPL="$NOOBDIR/$NUM/$SCRIPT"
 	# add executable bit for noob script
 	chmod +x "$NOOBPL"
 
-	RESULTDIR="$BINDIR/result"
-	SOLDIR="$BINDIR/result/$NUM/sol"
+	SOLDIR="$RESULTDIR/$NUM/sol"
 
 	[ -e "$SOLDIR" ] || mkdir -p "$SOLDIR"
     done
