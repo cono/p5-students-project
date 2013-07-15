@@ -19,21 +19,34 @@ for NUM in $(ls $NOOBDIR); do
     SOLDIR="$MODELDIR/$NUM/sol"
     [ -e "$SOLDIR" ] || mkdir "$SOLDIR"
 
-    for TEST in $(ls $DATDIR); do
-	DAT="$DATDIR/$TEST"
-	SOL="$SOLDIR/${TEST%dat}sol"
-	ERR="$SOLDIR/${TEST%dat}err"
-
-	[ -e "$SOL" ] || $MODELPL $DAT >$SOL 2>$ERR
-    done
-
     for SCRIPT in $(ls $NOOBDIR/$NUM); do
 	NOOBPL="$NOOBDIR/$NUM/$SCRIPT"
 	# add executable bit for noob script
 	chmod +x "$NOOBPL"
 
-	SOLDIR="$RESULTDIR/$NUM/sol"
+	RSOLDIR="$RESULTDIR/$NUM/sol/${SCRIPT%.pl}"
 
-	[ -e "$SOLDIR" ] || mkdir -p "$SOLDIR"
+	[ -e "$RSOLDIR" ] || mkdir -p "$RSOLDIR"
+
+	for TEST in $(ls $DATDIR); do
+	    DAT="$DATDIR/$TEST"
+	    SOL="$SOLDIR/${TEST%dat}sol"
+	    ERR="$SOLDIR/${TEST%dat}err"
+	    RSOL="$RSOLDIR/${TEST%dat}sol"
+	    RERR="$RSOLDIR/${TEST%dat}err"
+	    RESULT="$RSOLDIR/result.txt"
+	    LINE="${TEST%.dat}"
+
+	    [ -e "$SOL" ] || $MODELPL $DAT >$SOL 2>$ERR
+	    [ -e "$RSOL" ] || $NOOBPL $DAT >$RSOL 2>$RERR
+
+	    if diff -q $SOL $RSOL; then
+		LINE="ok ${TEST%.dat}"
+	    else
+		LINE="not ok ${TEST%.dat}"
+	    fi
+
+	    echo "$LINE" >> $RESULT
+	done
     done
 done
