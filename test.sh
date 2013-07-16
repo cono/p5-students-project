@@ -40,12 +40,31 @@ for NUM in $(ls $NOOBDIR); do
 	    RERR="$RSOLDIR/${TEST%dat}err"
 
 	    [ -e "$SOL" ] || $MODELPL $DAT >$SOL 2>$ERR
-	    [ -e "$RSOL" ] || $NOOBPL $DAT >$RSOL 2>$RERR
 
-	    if diff -q $SOL $RSOL; then
-		LINE="$LINE	ok"
+	    TERMINATE=""
+	    if [ ! -e "$RSOL" ]; then
+		$NOOBPL $DAT >$RSOL 2>$RERR &
+		PID=$!
+
+		for I in 1 2 3 4 5; do
+		    sleep 1
+		    kill -0 $PID 1>/dev/null 2>&1 || break
+		done
+
+		if kill -0 $PID 1>/dev/null 2>&1; then
+		    kill -9 $PID 1>/dev/null 2>&1
+		    TERMINATE="1"
+		fi
+	    fi
+
+	    if [ -n "$TERMINATE" ]; then
+		LINE="$LINE	T"
 	    else
-		LINE="$LINE	not ok"
+		if diff -q $SOL $RSOL; then
+		    LINE="$LINE	+"
+		else
+		    LINE="$LINE	-"
+		fi
 	    fi
 
 	    HEADER="$HEADER	${TEST%.dat}"
