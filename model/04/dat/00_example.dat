@@ -1,0 +1,11 @@
+copy test.txt 3.txt
+move 3.txt 4.txt
+delete 4.txt
+print test.txt
+sort test.txt
+print test.txt | sort
+print test.txt | sort | search aa
+search aa test.txt
+search aa test.txt >out.txt
+delete out.txt
+exit
