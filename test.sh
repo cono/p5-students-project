@@ -69,7 +69,7 @@ for NUM in $(ls $NOOBDIR); do
                 "./$MODELPL_SCRIPT_NAME" "./$DAT_FILE" >"./$SOL_FILE" 2>"./$ERR_FILE"
 
                 cd - >/dev/null 2>&1
-		rm -rf "$WORKINGDIR/$MODELPL_SCRIPT_NAME" $TESTFILE
+		rm -rf "$WORKINGDIR/$MODELPL_SCRIPT_NAME" $TESTFILE "$WORKINGDIR/$DAT_FILE"
 		mv $WORKINGDIR/$SOL_FILE $SOL_PATH
 		mv $WORKINGDIR/$ERR_FILE $ERR_PATH
             fi
@@ -97,7 +97,7 @@ for NUM in $(ls $NOOBDIR); do
 		fi
 
                 cd - >/dev/null 2>&1
-		rm -rf "$WORKINGDIR/$SCRIPT" $TESTFILE
+		rm -rf "$WORKINGDIR/$SCRIPT" $TESTFILE "$WORKINGDIR/$DAT_FILE"
 		mv $WORKINGDIR/$SOL_FILE $RSOL_PATH
 		mv $WORKINGDIR/$ERR_FILE $RERR_PATH
             fi
