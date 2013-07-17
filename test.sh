@@ -115,7 +115,9 @@ for NUM in $(ls $NOOBDIR); do
 		fi
 	    fi
 
-            HEADER="$HEADER	${TEST%.dat}"
+	    if [ -n "$HEADER" ]; then
+		HEADER="$HEADER	${TEST%.dat}"
+	    fi
         done
 
 	if [ -n "$HEADER" ]; then
