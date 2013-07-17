@@ -85,9 +85,10 @@ for NUM in $(ls $NOOBDIR); do
                 "./$SCRIPT" "$DAT_FILE" >"./$SOL_FILE" 2>"$ERR_FILE" &
 		PID=$!
 
+		sleep 0.3 > /dev/null 2>&1
 		for I in 1 2 3 4 5; do
-		    sleep 1
 		    kill -0 $PID >/dev/null 2>&1 || break
+		    sleep 1
 		done
 
 		if kill -0 $PID >/dev/null 2>&1; then
