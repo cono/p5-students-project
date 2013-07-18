@@ -1,14 +1,18 @@
-#! /usr/bin/perl
+#!/bin/env perl
 
 use strict;
 use warnings;
 
-use constant CANT_OPEN_FILE_ERR => "Cant open file\n";
-use constant COMMAND_FAILED_ERR => "Command failed\n";
 use constant CMD_SEPARATOR => qr/\s+\|/;
 use constant ALLOWED_CMD => qr/^\s*(copy|move|delete|print|sort|search)(\s+.*)*$/;
 use constant EXIT_CMD => qr/^\s*(exit|quit)\s*$/;
+use constant {
+    RESULT_FAIL => 0,
+    RESULT_OK => 1,
+    RESULT_OK_QUIET => 2,
+};
 
+my $IS_INTERACTIVE_MODE = !defined(@ARGV) ? 1 : 0;
 my @BUFFER = ();
 
 my %cmd_map = (
@@ -47,6 +51,10 @@ my %cmd_map = (
 print "MySh::>";
 while (<>) {
     chomp;
+    if ( !$IS_INTERACTIVE_MODE && defined($_) ) {
+        print "$_\n";
+    }
+
     @BUFFER = ();
     if ($_ =~ EXIT_CMD) {
         last;
@@ -62,8 +70,7 @@ while (<>) {
                 'args' => $2,
                 'is_piped' => $is_piped });
         } else {
-            $cmd =~ s/\s//g;
-            print("Command '$cmd' not found!");
+            print_err("Command '$cmd' not found!");
             $res  = 0;
             last;
         }
@@ -71,13 +78,25 @@ while (<>) {
             last if !$res;
     }
 
-    if ($res) {
+    if ($res == RESULT_OK) {
         foreach (@BUFFER) {
             print($_);
         }
-    }
+    } 
     print "MySh::>";
 };
+
+sub print_err {
+    my $err = shift;
+    $err =~ s/\n*$//;
+    $err .= "\n";
+    if ( $IS_INTERACTIVE_MODE ) {
+        print $err;
+    } else {
+        print STDOUT "0\n";
+        print STDERR $err;
+    }
+}
 
 sub _dispatch {
     my ($info) = @_;
@@ -97,9 +116,9 @@ sub _dispatch {
     #Validate input
     if ( $info->{is_piped} ) {
         if ( scalar(@args_arry) < $cmd_map{$info->{cmd}}->{mand_args_cnt} ) {
-            print("Invalid arguments for command '$info->{cmd}' args '@args_arry'");
+            print_err("Invalid arguments for command '$info->{cmd}' args '@args_arry'");
             $CmdProcessor::IS_READ_FROM_PREV = 0;
-            return 0;
+            return RESULT_OK;
         }
         elsif ( scalar(@args_arry) == $cmd_map{$info->{cmd}}->{mand_args_cnt} ) {
             $CmdProcessor::IS_READ_FROM_PREV = 1;
@@ -109,26 +128,26 @@ sub _dispatch {
             @BUFFER = ();
         }
         else {
-            print("Invalid command processing");
+            print_err("Invalid command processing");
             $CmdProcessor::IS_READ_FROM_PREV = 0;
-            return 0;
+            return RESULT_OK;
         }
     }
     elsif ( scalar(@args_arry) != $cmd_map{$info->{cmd}}->{args_cnt} ) {
-        print("Invalid arguments for command '$info->{cmd}' args '@args_arry'");
+        print_err("Invalid arguments for command '$info->{cmd}' args '@args_arry'");
         $CmdProcessor::IS_READ_FROM_PREV = 0;
-        return 0;
+        return RESULT_OK;
     }
 
     my $res = $cmd_map{$info->{cmd}}->{cmd}->(@args_arry);
     
     if ($info->{redirect} && $info->{redirect} ne "") {
         $info->{redirect} =~ s/\s+//g;
-        open(my $wfh, '>', $info->{redirect}) or (print(CANT_OPEN_FILE_ERR) && return 0);
+        open(my $wfh, '>', $info->{redirect}) or (print_err($!) && return RESULT_FAIL);
         print $wfh @BUFFER;
         close($wfh);
         @BUFFER = ();
-        return 1;
+        return RESULT_OK_QUIET;
     }
 
     return $res;
@@ -145,39 +164,39 @@ sub move_copy {
     require File::Copy;
     eval "File::Copy::$action('$file_from', '$file_to') or die;";
     if ($@) {
-        CORE::print(main::COMMAND_FAILED_ERR);
+        main::print_err($!);
+        return main::RESULT_FAIL;
     } else {
         @BUFFER = ();
     }
+    return main::RESULT_OK_QUIET;
 }
 
 sub copy {
-    move_copy('copy', @_);
-    return 1;
+    return move_copy('copy', @_);
 }
 
 sub move {
-    move_copy('move', @_);
-    return 1;
+    return move_copy('move', @_);
 }
 
 sub delete {
     $IS_READ_FROM_PREV = 0;
-    unlink(shift) or (CORE::print(main::COMMAND_FAILED_ERR) && return 0);
+    unlink(shift) or (main::print_err($!) && return main::RESULT_FAIL);
     @BUFFER = ();
-    return 1;
+    return main::RESULT_OK_QUIET;
 }
 
 sub print {
     $IS_READ_FROM_PREV = 0;
     @BUFFER = ();
     my $file_name = shift;
-    open(my $fh, '<', $file_name) or (CORE::print(main::CANT_OPEN_FILE_ERR) && return 0);
+    open(my $fh, '<', $file_name) or (main::print_err($!) && return main::RESULT_FAIL);
     while(<$fh>) {
         push(@BUFFER, $_);
     }
     close($fh);
-    return 1;
+    return main::RESULT_OK;
 }
 
 sub sort {
@@ -187,11 +206,11 @@ sub sort {
         $IS_READ_FROM_PREV = 0;
         @BUFFER = CORE::sort @BUFFER;
     } else {
-        open($fh, '<', $file_name) or (CORE::print(main::CANT_OPEN_FILE_ERR) && return 0);
+        open($fh, '<', $file_name) or (main::print_err($!) && return main::RESULT_FAIL);
         @BUFFER = CORE::sort(<$fh>);
         close($fh);
     }
-    return 1;
+    return main::RESULT_OK;
 }
 
 sub search {
@@ -206,7 +225,7 @@ sub search {
             }
         }
     } else {
-        open(my $fh, "<", $file_name) or (CORE::print(main::CANT_OPEN_FILE_ERR) && return 0);
+        open(my $fh, "<", $file_name) or (main::print_err($!) && return main::RESULT_FAIL);
         while (<$fh>) {
             if ($_ =~ $pattern) {
                 push(@content, $_);
@@ -215,6 +234,7 @@ sub search {
         close($fh);
     }
     @BUFFER = @content;
-    return 1;
+    return main::RESULT_OK;
 }
 
+1;
