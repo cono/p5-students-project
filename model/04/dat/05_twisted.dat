@@ -1,0 +1,7 @@
+aabbccddaabbcc
+#ooo
+
+"aa" => "bb"
+bb   => "cc"
+"cc"   => "dd"
+dd   => "aaa"
