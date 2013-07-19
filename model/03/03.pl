@@ -23,7 +23,7 @@ while (my ($key, $value) = each %hash) {
     print "error\n";
     die "Odd number of elements in hash";
   }
-  elsif ($key !~ /\w*,\d*/ || $value !~ /\w*,\d*/) {
+  elsif ($key !~ /^[\w]+$/ || $value !~ /^[\w]+$/) {
     print "error\n";
     die "Invalid key or value";
   }
