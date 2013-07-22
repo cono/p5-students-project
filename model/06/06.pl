@@ -5,14 +5,6 @@ use warnings;
 
 use Data::Dumper;
 
-my $fl1 = $ARGV[0];
-my $fl2 = $ARGV[1];
-
-unless($fl1 || $fl2 ){
-	print STDERR "Missing file names\n";
-	&usage();
-	exit(1);
-}
 sub usage {
 	print STDERR "Usage: $0 <matrix_file_1> <matrix_file_2>\n";
 	return 1;
@@ -34,12 +26,28 @@ sub read_matrix {
 	open(my $fh, '<' , $file ) || (print STDERR "Can't open file $file\n" &&   &usage && exit(1));
 
 	my $a = [];
+	my $b = [];
+	my $switch = "";
+
 	while(<$fh>){
+		chomp;
+
+		if(!$_){
+			$switch = "on";
+			next;
+		}
+
 		my @a = split;
-		push @$a, \@a;
+
+		if(! $switch){
+			push @$a, \@a;
+		}else{
+			push @$b, \@a;
+		}
+
 	}
 
-	return $a;
+	return ($a, $b);
 }
 
 sub check_matrix_size {
@@ -55,6 +63,8 @@ sub check_matrix_size {
 	if($col_num == 0){
 		return(0,0);
 	}
+
+	#print Dumper($matrix) . "\n";
 
 	foreach my $row (@$matrix){
 		if(scalar(@$row) != $col_num){
@@ -125,14 +135,17 @@ sub multiple_matrices {
 	return $matrix_mul;
 }
 
-&usage && exit(1) unless &file_exists($fl1) && &file_exists($fl2);
+my $fl1 = $ARGV[0];
 
-my $matrix1 = &read_matrix($fl1);
-my $matrix2 = &read_matrix($fl2);
+unless($fl1 ){
+	print STDERR "Missing file names\n";
+	&usage();
+	exit(1);
+}
 
+&usage && exit(1) unless &file_exists($fl1); 
+my ($matrix1, $matrix2) = &read_matrix($fl1);
 my $matrix_mul = &multiple_matrices($matrix1, $matrix2);
-
-#print Dumper($matrix_mul);
 
 foreach my $row (@$matrix_mul){
 	print join(' ', @$row) . "\n";
