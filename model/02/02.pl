@@ -18,7 +18,7 @@ foreach my $word (@array) {
   $hash{$word}++; 
 }
  
-foreach my $word (keys %hash) {
+foreach my $word (sort keys %hash) {
   $stars = '*' x $hash{$word};
   print qq($word $stars\n);
 }
