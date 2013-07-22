@@ -27,13 +27,13 @@ sub dump {
 
 	my $ref = ref $var;
 	if($ref eq 'SCALAR'){
-		$out .= "\$VAR$indent = " . $$var . "\n";
+		$out .= $$var . "\n";
 	}elsif($ref eq 'ARRAY'){
-		$out .= "\$VAR$indent = [" . "\n" 
+		$out .= "[" . "\n" 
 		. join(",\n", map("\t" x $indent . &dump($_, $indent + 1), @$var)) 
 		. "\n" . "\t" x ($indent - 1) . "]";
 	}elsif($ref eq 'HASH'){
-		$out .= "\$VAR$indent = {" . "\n" 
+		$out .= "{" . "\n" 
 		. join(",\n", map("\t" x $indent. $_ . " => " . &dump($var->{$_}, $indent + 1), keys %$var))
 		. "\n". "\t" x ($indent - 1) . "}";
 	}elsif($ref eq 'REF'){
@@ -46,6 +46,8 @@ sub dump {
 	return $out;
 }
 
+#use Data::Dumper;
+#print Dumper($hash);
 print &dump($var) . "\n";
 
 
