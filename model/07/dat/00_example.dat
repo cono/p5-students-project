@@ -1,0 +1,61 @@
+hash
+$hash = {
+	a => "1j",
+	b => "23",
+	c => {
+		d => "inner",
+		e => "outer",
+		f => {
+			g => "one more level",
+			x => "d level",
+		},
+		g2 => {
+			g => "one more level",
+			x => "d level",
+		}
+	},
+
+	array1 => [
+		"val1",
+		"val2",
+	],
+
+	hash_obj => MyTestHash->new({"a"=>"b", "c"=>"d"}),
+	array_obj => MyTestArray->new(["a", "b", "c", "d", "e", "f"]),
+	regexp => qr/.*/,
+	code   => \&{1+1},
+};
+
+{
+	package MyTestHash;
+
+	sub new {
+		my $class = shift;
+		my $self = shift;
+
+		bless $self, $class;
+		return $self;
+	}
+
+	sub get_struct {
+		my $self = shift;
+		return "IN<-" . join(",", map( $_ . "=>" . $self->{$_} ,keys %$self)); 
+	}
+};
+
+{
+	package MyTestArray;
+
+	sub new {
+		my $class = shift;
+		my $self = shift;
+
+		bless $self, $class;
+		return $self;
+	}
+
+	sub get_struct {
+		my $self = shift;
+		return "IN<-" . join(",", @$self); 
+	}
+};
