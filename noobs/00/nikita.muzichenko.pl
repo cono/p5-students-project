@@ -30,7 +30,7 @@ sub urovnenie() {
 	}
 	else { return 0 }
 	my $element = $#x + 1;
-	my $rez     = "$element(@x)";
+	my $rez     = "$element (@x)";
 }
 
 my $test_file_path = $ARGV[0];
