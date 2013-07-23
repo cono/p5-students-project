@@ -36,8 +36,8 @@ while ( <FH> ) {
 					$number=($number-$rest)/$base;
 				}
 			while ($number>0);
-			if ($z==0 && $result==0 ) {print STDOUT "„исло $number не соответствует дес€тичной системе исчислени€  \n";}
-			else {print STDOUT "$result \n"; }
+			if ($z==0 && $result==0 ) {print STDERR "„исло $number не соответствует дес€тичной системе исчислени€  \n";}
+			else {print STDOUT "$result\n"; }
 		}
 		elsif (($flag==2) && (($base>1) && ($base<37)))
 		{
@@ -47,16 +47,16 @@ while ( <FH> ) {
 			for (my $i=0;$i<=@array-1;$i++)
 			{
 				if ( $array[$i] lt '9' && $array[$i] ge '0')  {$z=$array[$i];} else {$z=ord($array[$i])-55;}
-				if ($z>=$base) {print STDOUT "„исло 0$number не соответствует системе исчислени€ с основанием $base \n"; $n=0;last;}
+				if ($z>=$base) {print STDERR "„исло 0$number не соответствует системе исчислени€ с основанием $base \n"; $n=0;last;}
 				$step=$step+$base**$x*$z;
 				$x--;
 			}
-			if ($n==1) {print STDOUT "$step \n";}
+			if ($n==1) {print STDOUT "$step\n";}
 			
 		}
-		else {print STDOUT " \n";} 
+		else {print STDOUT "\n";} 
 	}
-	else {print STDOUT "Ќет данных дл€ обработки \n";}
+	else {print STDERR "Ќет данных дл€ обработки \n";}
 	
 	
 	print STDERR "...\n" if ( $res eq 'Error' );
