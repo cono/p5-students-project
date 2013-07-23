@@ -2,13 +2,13 @@
 #task_01
 use strict;
 use Scalar::Util qw(looks_like_number);
-print "Content-type: text/plain\n\n";
+#print "Content-type: text/plain\n\n";
 # online calculator:
 # http://numsys.ru/
 
 
 my $test_file_path = $ARGV[0];
-open( FH, "<", "tests.dat") or die "Can not open test file: $!";
+open( FH, "<", $test_file_path) or die "Can not open test file: $!";
 
 			
 while ( <FH> ) {
