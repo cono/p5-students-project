@@ -1,0 +1,62 @@
+print "Current date:\n";
+my $current_date = Date->new();
+print $current_date->year. "\n";
+print $current_date->month . "\n";
+print $current_date->day . "\n";
+print $current_date->get_struct . "\n";
+print "\n";
+
+
+print "Set full date as hash:\n";
+my $fixed_date_hash = Date->new({year=>2012, month=>6, day=>21});
+print $fixed_date_hash->get_struct . "\n";
+print "\n";
+
+
+print "Set full date as array:\n";
+my $fixed_date_array = Date->new([2012,6,21]);
+print $fixed_date_array->get_struct . "\n";
+print "\n";
+
+print "Shouldn't create object, if not full params provided:\n";
+my $fail_date_hash  = Date->new({year=>2012, month=>6});
+print "Object not created\n" if not defined $fail_date_hash;
+my $fail_date_array = Date->new([2012, undef, 6]);
+print "Object not created\n" if not defined $fail_date_array;
+print "\n";
+
+print "Should be able to change year/month/day:\n";
+my $test_change_date = Date->new();
+print $test_change_date->get_struct . "\n";
+$test_change_date->day(1);
+$test_change_date->year(2012);
+$test_change_date->month(7);
+print $test_change_date->get_struct . "\n";
+$test_change_date->{day} = 2;
+$test_change_date->{year} = 2011;
+$test_change_date->{month} = 2;
+print $test_change_date->get_struct . "\n";
+print "\n";
+
+print "Calendar should be a Date" . "\n";
+my $calendar = Calendar->new([2011, 1,1]);
+if($calendar->isa("Date")){
+	print "Calendar is a Date\n";
+}
+print "\n";
+
+print "Calendar should be able to add months\n";
+my $now_plus_5_month = $calendar->add_months(5);
+print $now_plus_5_month->get_struct() . "\n";
+print "\n";
+
+
+print "Calendar should be able to add years\n";
+my $now_plus_5_years = $calendar->add_years(5);
+print $now_plus_5_years->get_struct() . "\n";
+print "\n";
+
+print "Calendar should be able to add days\n";
+my $now_plus_5_days= $calendar->add_days(5);
+print $now_plus_5_days->get_struct() . "\n";
+print "\n";
