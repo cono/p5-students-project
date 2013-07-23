@@ -6,22 +6,24 @@ main();
 sub main {
 
     my $file_path = $ARGV[0];
+    my $number = qr|[\-+]?\d*\.?\d+(?:[eE][\-+]?\d+)?|;
 
     open( FH, "<", "$file_path") or die "Can not open test file: $!";
 
     while ( <FH> ) {
-        $_ =~ s/\s*//g;
-        $_ =~ m/^([\d\-\+]+),([\d\-\+]+),([\d\-\+]+)$/;
-        my ( $a, $b, $c ) = ( $1, $2, $3 );
+        chomp;
+        my ($a, $b, $c) = /^\s*($number)\s*,\s*($number)\s*,\s*($number)\s*$/o;
 
         my $is_correct_input = ( defined $a && defined $b && defined $c );
         unless ( $is_correct_input ) {
-            print STDOUT 'Error' . "\n"; print STDERR "Wrong input parameters for string: $_" ;
+            print STDOUT "Error\n";
+            print STDERR "Wrong input parameters for string: $_\n";
             next;
         }
 
         if ($a == 0) {
-            print STDOUT 'Error' . "\n"; print STDERR "Not a quadratic equation.\n";
+            print STDOUT "Error\n";
+            print STDERR "Not a quadratic equation.\n";
             next;
         } else {
             my $D = $b * $b - 4 * $a * $c;
