@@ -27,13 +27,26 @@ sub is_valid_input_number {
         my $char = uc($_);
         grep
         {
-          ( PALETTE_CONVERSION->[$_] eq $char && $_ > $args{'base'} ) ? return 0 : ()
+          ( PALETTE_CONVERSION->[$_] eq $char && $_ >= $args{'base'} ) ? return 0 : ()
         } 0..$#{+PALETTE_CONVERSION};
 
     } split( //, $args{'number'} );
     return 1;
 }
 
+sub is_valid_input_base {
+    my %args = (
+        'base' => 0,
+        @_,
+    );
+
+    $args{'base'} =~ m/^(\d+)$/;
+
+    ( $1 && $1 > 1 && $1 <= MAX_NUMERAL_SYSTEM ) ?
+        return 1
+        : return 0;
+
+}
 
 sub count_positions {
     my $base = shift;
@@ -59,23 +72,18 @@ sub dec2basen {
 
     return ( 'Error', 'Wrong input parameters' )
         unless ( is_valid_input_number( base => 10,  number => $dec ) );
-
+    return ( 'Error', 'Unsupported numeral system' )
+        unless ( is_valid_input_base( base => $base ) );
     return ( 0, 'OK' ) if ( $dec eq 0 );
 
-    if ( $base > 1 && $base <= MAX_NUMERAL_SYSTEM ) {
-        my $positions = 0;
+    my $positions = 0;
 
-        for ( ; ( count_positions( $base, ++$positions ) <= $dec ) ; ) { }
+    for ( ; ( count_positions( $base, ++$positions ) <= $dec ) ; ) { }
 
-        for ( my $j = 1; $j <= $positions; $j++ ) {
-            my $char_index = int( $dec / count_positions( $base, $positions - $j ) );
-            $result .= PALETTE_CONVERSION->[ $char_index ];
-            $dec %= count_positions( $base, $positions - $j );
-        }
-
-    } else {
-        $result = 'Error';
-        $description = 'Unsupported numeral system';
+    for ( my $j = 1; $j <= $positions; $j++ ) {
+        my $char_index = int( $dec / count_positions( $base, $positions - $j ) );
+        $result .= PALETTE_CONVERSION->[ $char_index ];
+        $dec %= count_positions( $base, $positions - $j );
     }
 
     return ( $result, $description );
@@ -94,19 +102,12 @@ sub basen2dec {
 
     return ( 'Error', 'Wrong input parameters' )
         unless ( is_valid_input_number( %args ) );
-
+    return ( 'Error', 'Unsupported numeral system' )
+        unless ( is_valid_input_base(  base => $base ) );
     return ( 0, 'OK' ) if ( $num eq 0 );
 
-
-    if ( $base > 0 && $base < MAX_NUMERAL_SYSTEM ) {
-
-        for ( my $i = 0; $i < length( $num ); $i++ ) {
-            $result += get_arr_index( substr( $num, $i, 1 ) ) * count_positions( $base, length( $num ) - $i - 1 );
-        }
-
-    } else {
-        $result = 'Error';
-        $description = 'Unsupported numeral system';
+    for ( my $i = 0; $i < length( $num ); $i++ ) {
+        $result += get_arr_index( substr( $num, $i, 1 ) ) * count_positions( $base, length( $num ) - $i - 1 );
     }
 
     return ( $result, $description );
@@ -140,8 +141,7 @@ sub main {
 
     while ( <FH> ) {
 
-        $_ =~ s/\s//g;
-        unless ( $_ =~ m/^([a-z0-9]+),([a-z0-9]+),([a-z0-9]+)$/i ) {
+        unless ( $_ =~ m/^\s*([a-z0-9]+)\s*,\s*([a-z0-9]+)\s*,\s*([a-z0-9]+)\s*$/i ) {
             $_ =~ s/\n*$/\n/;
             print STDOUT 'Error' . "\n"; print STDERR "Wrong input parameters for string: $_";
             next;
