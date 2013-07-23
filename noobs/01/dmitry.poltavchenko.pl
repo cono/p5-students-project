@@ -1,7 +1,15 @@
 #!/usr/bin/perl -w
 use strict;
-use Switch;
-use List::MoreUtils qw(firstidx);
+#use Switch;
+#use List::MoreUtils qw(firstidx);
+
+sub firstidx(&@) {
+    my $s = shift;
+
+    for my $i (@_) {
+        return $i if $s->($i);
+    }
+}
 
 my @symbols = ('0','1','2','3','4','5','6','7','8','9',
                  'A','B','C','D','E','F','G','H','I','J','K','L','M',
@@ -76,29 +84,26 @@ while ( my $str = <FH> ) {
     $str = uc($str);
     my ($a, $b, $c) = split(",", $str);
     if (defined $a && defined $b && defined $c) {
-        switch ($a) {
-            case 1 {
-                if ( number_base_check($b, 10) ) {
-                    my $number = dec2any($b, $c);
-                    print STDOUT "$number\n";
-                } else {
-                    print STDOUT "Error\n";  
-                    print STDERR "Check number notation\n"; 
-                }
+        if ($a == 1) {
+            if ( number_base_check($b, 10) ) {
+                my $number = dec2any($b, $c);
+                print STDOUT "$number\n";
+            } else {
+                print STDOUT "Error\n";  
+                print STDERR "Check number notation\n"; 
             }
-            case 2 {
-                if ( number_base_check($b, $c) ) {
-                    my $number = any2dec($b, $c);
-                    print STDOUT "$number\n";
-                } else {
-                    print STDOUT "Error\n"; 
-                    print STDERR "Check number notation\n";  
-                }
-            }
-            else {
+        } elsif ($a == 2) {
+            if ( number_base_check($b, $c) ) {
+                my $number = any2dec($b, $c);
+                print STDOUT "$number\n";
+            } else {
                 print STDOUT "Error\n"; 
-                print STDERR "Operation not supported\n";    
+                print STDERR "Check number notation\n";  
             }
+        }
+        else {
+            print STDOUT "Error\n"; 
+            print STDERR "Operation not supported\n";    
         }
     } else {
         print STDOUT "Error\n";
