@@ -35,10 +35,10 @@ while ($i < $counter) {
 		if($desc > 0) {
 			$res1 = (-$b + sqrt($desc) ) / (2 * $a);
 			$res2 = (-$b - sqrt($desc) ) / (2 * $a);
-			print STDOUT "2($res1 $res2)\n";
+			print STDOUT "2 ($res1 $res2)\n";
 		} elsif($desc == 0) {
 			$res1 = (-$b + sqrt($desc) ) / (2 * $a);
-			print STDOUT "1($res1)\n";
+			print STDOUT "1 ($res1)\n";
 		} else {			
 			print STDOUT "0\n";	
 		}			
