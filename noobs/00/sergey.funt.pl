@@ -2,13 +2,12 @@
 #task_00
 use strict;
 use Scalar::Util qw(looks_like_number);
-print "Content-type: text/plain\n\n";
 # online calculator:
 # http://numsys.ru/
 
 
 my $test_file_path = $ARGV[0];
-open( FH, "<", "tests.dat") or die "Can not open test file: $!";
+open( FH, "<", $test_file_path) or die "Can not open test file: $!";
 
 while ( <FH> ) {
 	my $res=0;
@@ -47,14 +46,14 @@ while ( <FH> ) {
 				}
 				elsif ($diskr eq 0)
 				{
-					$res='1('.-$a[1]/(2*$a[0]).')';
+					$res='1 ('.-$a[1]/(2*$a[0]).')';
 				}
 				elsif ($diskr gt 0)
 				{
 					$res=(-$a[1]+sqrt($diskr))/(2*$a[0]);
 					my $testVal=$res;
 					$res=(-$a[1]-sqrt($diskr))/(2*$a[0]);
-					$res="2(".$testVal.' '.$res.")";
+					$res="2 (".$testVal.' '.$res.")";
 				}
 				else
 				{
@@ -78,7 +77,7 @@ while ( <FH> ) {
 		$res="Error";
 		print STDERR "Empty string\n";
 	}
-	print STDOUT "$res \n";
+	print STDOUT "$res\n";
 	
 }
 close ( FH );
