@@ -26,6 +26,18 @@ $hash = {
 	code   => \&{1+1},
 };
 $hash->{ref_to_itself} = $hash;
+my $scalar_variable = "scalar_variable";
+my $ref_to_scalar_variable = \$scalar_variable;
+my $ref_to_ref = \$ref_to_scalar_variable;
+$hash->{ref_to_ref} = $ref_to_ref;
+
+my $array = ['a', 0, 2 ];
+my $ref_to_array_ref = \$array;
+$hash->{ref_to_array_ref} = $ref_to_array_ref;
+
+my $one_more_hash = { "key1" => "value1", "key2" => "value2" };
+my $ref_to_one_more_hash = \$one_more_hash;
+$hash->{ref_to_hash_ref} = \$ref_to_one_more_hash;
 
 {
 	package MyTestHash;
