@@ -25,6 +25,7 @@ $hash = {
 	regexp => qr/.*/,
 	code   => \&{1+1},
 };
+$hash->{ref_to_itself} = $hash;
 
 {
 	package MyTestHash;

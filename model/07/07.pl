@@ -17,15 +17,24 @@ eval($code_block);
 no strict "refs";
 my $var = $$line;
 
+my $checked_refs = {};
+
 sub dump {
 	my $var = shift;
 	my $indent = shift;
 
 	$indent = $indent ? $indent : 1;
+	my $ref = ref $var;
+	
+	if($ref){
+		$checked_refs->{"$var"} = $checked_refs->{"$var"} ? $checked_refs->{"$var"} + 1 : 1 ;
+
+		if($checked_refs->{"$var"} && $checked_refs->{"$var"} > 1){
+			return "$ref";
+		}
+	}
 
 	my $out = "";
-
-	my $ref = ref $var;
 	if($ref eq 'SCALAR'){
 		$out .= $$var . "\n";
 	}elsif($ref eq 'ARRAY'){
@@ -34,7 +43,7 @@ sub dump {
 		. "\n" . "\t" x ($indent - 1) . "]";
 	}elsif($ref eq 'HASH'){
 		$out .= "{" . "\n" 
-		. join(",\n", map("\t" x $indent. $_ . " => " . &dump($var->{$_}, $indent + 1), keys %$var))
+		. join(",\n", map("\t" x $indent. $_ . " => " . &dump($var->{$_}, $indent + 1), sort {uc($a) cmp uc($b)} keys %$var))
 		. "\n". "\t" x ($indent - 1) . "}";
 	}elsif($ref eq 'REF'){
 		$out = "$ref";
@@ -43,11 +52,8 @@ sub dump {
 	}else{
 		$out .= "'$var'";
 	}
+
 	return $out;
 }
 
-#use Data::Dumper;
-#print Dumper($hash);
 print &dump($var) . "\n";
-
-
