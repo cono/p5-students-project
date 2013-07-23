@@ -1,4 +1,4 @@
-#!/bin/usr/perl -w
+#! /usr/bin/perl -w
 
 use strict;
 use Scalar::Util "looks_like_number";
