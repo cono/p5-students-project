@@ -38,7 +38,7 @@ while ( <FH> ) {
 			}
 			$result = "(".$result.")";			
 		}
-		$result = $m." ".$result." \n";
+		$result = $m." ".$result."\n";
 	}
 
     print STDOUT $result;
