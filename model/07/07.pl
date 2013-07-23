@@ -3,7 +3,12 @@
 use warnings;
 
 my $fl = $ARGV[0];
-open(my $fh, '<', $fl);
+if(!$fl || ! -f $fl ){
+	print STDERR "Usage: $0 <filename>\n";
+	exit;
+}
+
+open(my $fh, '<', $fl) || die "Can't open file $fl\n";
 my $line = <$fh>;
 chomp $line;
 
