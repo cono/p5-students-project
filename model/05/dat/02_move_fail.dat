@@ -1,0 +1,4 @@
+move
+move test.txt
+move test1.txt test2.txt
+exit

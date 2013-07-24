@@ -1,0 +1,7 @@
+delete 1111 | sort
+delete 1111 | sort text.txt
+delete 1111 | search aa
+delete 1111 | search aa text.txt
+sort | sort
+sort test.txt | sort 1111
+exit
