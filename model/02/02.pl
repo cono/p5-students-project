@@ -11,6 +11,12 @@ my @array = do {
     open(my $fh, '<', $file) or die "Can't open file: $!";
     split(/\s+/, <$fh>);
 };
+
+unless (scalar @array) {
+    print "error\n";
+    die "No data";
+}
+
 my %hash = ();
 my $stars = '';
 
