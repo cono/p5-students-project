@@ -15,12 +15,16 @@ my %hash = ();
 my $stars = '';
 
 foreach my $word (@array) {
-  $hash{$word}++; 
+    if ($word !~ /^[a-zA-Z_0-9]+$/) {
+        print "error\n";
+        die "Wrong symbols";
+    }
+    $hash{$word}++; 
 }
- 
+
 foreach my $word (sort keys %hash) {
-  $stars = '*' x $hash{$word};
-  print qq($word $stars\n);
+    $stars = '*' x $hash{$word};
+    print qq($word $stars\n);
 }
 
 1;
