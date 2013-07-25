@@ -11,6 +11,11 @@ open(FH, '<', $file) or die "Can't open file: $!";
 my $first = <FH>;
 chomp($first);
 
+if ($first !~ /^[\w]+$/) {
+    print "error\n";
+    die "First key is wrongly defined";
+}
+
 my $line = <FH>;
 chomp($line);
 
@@ -29,7 +34,7 @@ while (my ($key, $value) = each %hash) {
   }
 }
 
-my %cycle = ($first => 1);
+my %cycle;
 
 my $current = $first;
 print "$current";
