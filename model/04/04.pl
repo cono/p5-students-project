@@ -56,7 +56,7 @@ sub _process {
     $self->_read_file;
     my $replaces = $self->{'replaces'};
     my $string = $self->{'str'};
-    my $re = join("|", sort keys %$replaces);
+    my $re = join("|", sort {$b cmp $a} keys %$replaces);
     $re = qr/$re/;
     $string =~ s/($re)/$replaces->{$1}/g;
     $self->{'str_replaced'} = $string;
