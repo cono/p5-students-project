@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#/usr/bin/perl -w
 use strict;
 
 my $test_file_path = $ARGV[0];
