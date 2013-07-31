@@ -57,7 +57,7 @@ while (<>) {
 
     @BUFFER = ();
     if ($_ =~ EXIT_CMD) {
-        last;
+        exit(0);
     }
     my @cmd_list = split(CMD_SEPARATOR, $_);
     my $is_piped = 0;
@@ -85,6 +85,8 @@ while (<>) {
     } 
     print "MySh::>";
 };
+
+print "\n" if !$IS_INTERACTIVE_MODE;
 
 sub print_err {
     my $err = shift;
