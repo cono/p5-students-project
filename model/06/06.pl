@@ -7,7 +7,6 @@ use Data::Dumper;
 
 sub usage {
 	print STDERR "Usage: $0 <matrix_file_1> <matrix_file_2>\n";
-	print "ERROR\n";
 	return 1;
 }
 
