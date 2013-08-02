@@ -7,6 +7,7 @@ use Data::Dumper;
 
 sub usage {
 	print STDERR "Usage: $0 <matrix_file_1> <matrix_file_2>\n";
+	print "ERROR\n";
 	return 1;
 }
 
@@ -69,6 +70,7 @@ sub check_matrix_size {
 	foreach my $row (@$matrix){
 		if(scalar(@$row) != $col_num){
 			print STDERR "Not a matrix\n";
+			print "ERROR\n";
 			&usage;
 			exit(1);
 		}
@@ -76,6 +78,7 @@ sub check_matrix_size {
 		foreach my $value (@$row){
 			if($value !~ /[0-9]/){
 				print STDERR "matrix contains not-numer values\n";
+				print "ERROR\n";
 				&usage;
 				exit(1);
 			}
@@ -100,6 +103,7 @@ sub validate_matrices {
 		return ($matrix1_row_count, $matrix2_col_count, $matrix1_col_count);
 	}else{
 		print STDERR "unable to multiple these $matrix1_col_count != $matrix2_row_count\n";
+		print "ERROR\n";
 		&usage;
 		exit(1);
 	}
@@ -139,6 +143,7 @@ my $fl1 = $ARGV[0];
 
 unless($fl1 ){
 	print STDERR "Missing file names\n";
+	print "ERROR\n";
 	&usage();
 	exit(1);
 }
