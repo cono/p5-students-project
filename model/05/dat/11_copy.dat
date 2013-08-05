@@ -1,0 +1,4 @@
+copy test.txt a.txt
+delete a.txt
+delete a.txt
+exit

@@ -1,0 +1,9 @@
+copy test.txt 0.txt
+move 0.txt 1.txt
+move 1.txt 2.txt
+sort 2.txt > 3.txt
+delete 2.txt
+move 3.txt 0.txt
+print 0.txt
+delete 0.txt
+exit

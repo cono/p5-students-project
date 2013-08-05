@@ -1,0 +1,3 @@
+print test.txt | search a | search b
+print test.txt | search b | search a
+exit

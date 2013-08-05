@@ -1,0 +1,6 @@
+copy test.txt a.txt
+move a.txt b.txt
+print b.txt
+delete b.txt
+print a.txt
+exit

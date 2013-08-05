@@ -1,0 +1,3 @@
+search aa test.txt
+print test.txt | search ab
+exit
