@@ -1,0 +1,7 @@
+print "Calendar inheritance\n";
+print "Calendar should be a Date" . "\n";
+my $calendar = Calendar->new([2011, 1,1]);
+if($calendar->isa("Date")){
+	print "Calendar is a Date\n";
+}
+print "\n";

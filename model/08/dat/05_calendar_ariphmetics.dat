@@ -1,0 +1,17 @@
+my $calendar = Calendar->new([2011, 1,1]);
+print "Calendar plus minus\n";
+print "Calendar should be able to add months\n";
+my $now_plus_5_month = $calendar->add_months(5);
+print $now_plus_5_month->get_struct() . "\n";
+print "\n";
+
+
+print "Calendar should be able to add years\n";
+my $now_plus_5_years = $calendar->add_years(5);
+print $now_plus_5_years->get_struct() . "\n";
+print "\n";
+
+print "Calendar should be able to add days\n";
+my $now_plus_5_days= $calendar->add_days(5);
+print $now_plus_5_days->get_struct() . "\n";
+print "\n";

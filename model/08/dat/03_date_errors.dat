@@ -1,0 +1,7 @@
+print "Date setting errors\n";
+print "Shouldn't create object, if not full params provided:\n";
+my $fail_date_hash  = Date->new({year=>2012, month=>6});
+print "Object not created\n" if not defined $fail_date_hash;
+my $fail_date_array = Date->new([2012, undef, 6]);
+print "Object not created\n" if not defined $fail_date_array;
+print "\n";

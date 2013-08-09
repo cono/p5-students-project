@@ -1,0 +1,33 @@
+print "Set Date in different formats" . "\n";
+
+print "Current date:\n";
+my $current_date = Date->new();
+print $current_date->year. "\n";
+print $current_date->month . "\n";
+print $current_date->day . "\n";
+print $current_date->get_struct . "\n";
+print "\n";
+
+
+print "Set full date as hash:\n";
+my $fixed_date_hash = Date->new({year=>2012, month=>6, day=>21});
+print $fixed_date_hash->get_struct . "\n";
+print "\n";
+
+print "Another set with hash:\n";
+my $date_hash = {year=>2012, month=>6, day=>21};
+$fixed_date_hash = Date->new($date_hash);
+print $fixed_date_hash->get_struct . "\n";
+print "\n";
+
+
+print "Set full date as array:\n";
+my $fixed_date_array = Date->new([2012,6,21]);
+print $fixed_date_array->get_struct . "\n";
+print "\n";
+
+print "Another set full date as array:\n";
+my $date_array = [2011,5,2];
+$fixed_date_array = Date->new($date_array);
+print $fixed_date_array->get_struct . "\n";
+print "\n";

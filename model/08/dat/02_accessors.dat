@@ -1,0 +1,13 @@
+print "Date Accessors\n";
+print "Should be able to change year/month/day:\n";
+my $test_change_date = Date->new();
+print $test_change_date->get_struct . "\n";
+$test_change_date->day(1);
+$test_change_date->year(2012);
+$test_change_date->month(7);
+print $test_change_date->get_struct . "\n";
+$test_change_date->{day} = 2;
+$test_change_date->{year} = 2011;
+$test_change_date->{month} = 2;
+print $test_change_date->get_struct . "\n";
+print "\n";
