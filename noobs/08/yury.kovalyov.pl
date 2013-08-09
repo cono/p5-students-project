@@ -77,6 +77,11 @@ sub _construct
 
 		if ( my $defaultConstructor = ( not $type_name ) )
 		{
+			if ( my $wrongExtraParametersInNew = ( 0 != scalar(@_) ) )
+			{
+				last;
+			}
+
 			my @members = Help::members();
 			my @params = Help::get_current_date();
 
@@ -85,6 +90,11 @@ sub _construct
 		}
 		elsif ( 'ARRAY' eq $type_name )
 		{
+			if ( my $wrongExtraParametersInNew = ( 1 != scalar(@_) ) )
+			{
+				last;
+			}
+
 			my @members = Help::members();
 			my @params = @{ $_[0] };
 
@@ -92,6 +102,7 @@ sub _construct
 			{
 				last;
 			}
+			
 			if ( ! Help::is_good_date( @params ) )
 			{
 				last;
@@ -102,6 +113,11 @@ sub _construct
 		}
 		elsif ( 'HASH' eq $type_name )
 		{
+			if ( my $wrongExtraParametersInNew = ( 1 != scalar(@_) ) )
+			{
+				last;
+			}
+		
 			my @members = sort( Help::members() );
 			
 			my $hash_ref = shift;
@@ -110,35 +126,47 @@ sub _construct
 				last;
 			}
 
-			my %hash = %{ $hash_ref }; # copy!!!
-
+			my %hash = %{ $hash_ref };
+		
 			my @values = values %hash;
-			if ( scalar( @members ) != scalar( grep { defined $_ } @values ) )
+			if ( scalar( @members ) > scalar( grep { defined $_ } @values ) )
 			{
 				last;
 			}
 			
 			my @keys = sort( keys %hash );
-			if ( scalar( @members ) != scalar( grep { defined $_ } @keys ) )
+			if ( scalar( @members ) > scalar( grep { defined $_ } @keys ) )
 			{
 				last;
 			}
-			if ( !( @members ~~ @keys ) )
+
+#			removed arrays direct compare as there can be extra arguments in hash (last information)
+#			if ( !( @members ~~ @keys ) )
+#			{
+#				last;
+#			}
+			if ( my $quickFixNotEnoughDataPassed = ( scalar(@members) != scalar( grep { exists( $hash{$_} ) } @members )  ) )
 			{
 				last;
 			}
+#			i.e the same -
+#			if ( my $quickFixNotEnoughDataPassed = !( exists( $hash{$members[0]} ) and exists( $hash{$members[1]} ) and exists( $hash{$members[2]} ) ) )
+#			{
+#				last;
+#			}
+
 			if ( ! Help::is_good_date( map{ $hash{$_} } reverse @members ) )
 			{
 				last;
 			}
 			
-			# !!! : not '$self = $hash_ref;' i.e. 
-			# client can not expect to get back same href as blessed href
 			$self = { %hash }; 
 		}
 		else
 		{
-			die( "Strange constructor call with: '$type_name'." );
+			# two aproaches possible : throw exception -
+			# die( "Strange constructor call with: '$type_name'." );
+			# or return null -
 		}
 	}
 
@@ -184,14 +212,21 @@ sub year
 
 	if ( @_ )
 	{
+		if ( my $quickFixAnswer78 = ( 1 < scalar(@_) ) )
+		{
+			return undef;
+		}
+
 		my $copy = $self->clone();
 		$copy->{year} = shift;
-		if ( ! Help::is_good_date( serialize($copy) ) )
+
+		if ( !Help::is_good_date( serialize($copy) ) )
 		{
-			die( "Wrong year." );
+			# die( "Wrong year." );
+			return undef;
 		}
-		$self->{year} = $copy->{year};
 		
+		$self->{year} = $copy->{year};
 	}
 
 	return $self->{year};
@@ -203,14 +238,21 @@ sub month
 
 	if ( @_ )
 	{
+		if ( my $quickFixAnswer78 = ( 1 < scalar(@_) ) )
+		{
+			return undef;
+		}
+
 		my $copy = $self->clone();
 		$copy->{month} = shift;
-		if ( ! Help::is_good_date( serialize($copy) ) )
+
+		if ( !Help::is_good_date( serialize($copy) ) )
 		{
-			die( "Wrong month." );
+			# die( "Wrong month." );
+			return undef;
 		}
-		$self->{month} = $copy->{month};
 		
+		$self->{month} = $copy->{month};
 	}
 
 	return $self->{month};
@@ -222,14 +264,21 @@ sub day
 
 	if ( @_ )
 	{
+		if ( my $quickFixAnswer78 = ( 1 < scalar(@_) ) ) 
+		{
+			return undef;
+		}
+
 		my $copy = $self->clone();
 		$copy->{day} = shift;
-		if ( ! Help::is_good_date( serialize($copy) ) )
+
+		if ( !Help::is_good_date( serialize($copy) ) )
 		{
-			die( "Wrong day." );
+			# die( "Wrong day." );
+			return undef;
 		}
-		$self->{day} = $copy->{day};
 		
+		$self->{day} = $copy->{day};
 	}
 
 	return $self->{day};
@@ -241,7 +290,8 @@ sub get_struct
 #
 #	return join( '/', map { $self->{$_} } reverse sort keys %{ $self } ); 
 #	or -
-	return join( '/', map { $self->{$_} } reverse sort keys %$self );
+	my %h = map { $_ => 1 } Help::members();
+	return join( '/', map { $self->{$_} } grep { exists( $h{$_} ) } reverse sort keys %$self );
 #	is a kind of "funny way" \perldoc contains such words\ (or Perl-idiomatic aproach?) to 
 #	return join( '/', ($self->{year},$self->{month},$self->{day}) );
 }
@@ -259,11 +309,17 @@ sub add_years
 {
 	my $self = shift;
 
+	if ( my $quickFixAnswer78 = ( 1 < scalar(@_) ) ) 
+	{
+		return undef;
+	}
+
 	my @ymd = Help::add_years( shift, $self->serialize() );
 
 	if ( ! Help::is_good_date( @ymd ) )
 	{
-		die( "Internal error." );
+		# die( "Internal error." );
+		return undef;
 	}
 
 	return $self->deserialize( @ymd );
@@ -273,11 +329,17 @@ sub add_months
 {
 	my $self = shift;
 
+	if ( my $quickFixAnswer78 = ( 1 < scalar(@_) ) ) 
+	{
+		return undef;
+	}
+
 	my @ymd = Help::add_months( shift, $self->serialize() );
 
 	if ( ! Help::is_good_date( @ymd ) )
 	{
-		die( "Internal error." );
+		# die( "Internal error." );
+		return undef;
 	}
 
 	return $self->deserialize( @ymd );
@@ -287,11 +349,17 @@ sub add_days
 {
 	my $self = shift;
 
+	if ( my $quickFixAnswer78 = ( 1 < scalar(@_) ) ) 
+	{
+		return undef;
+	}
+
 	my @ymd = Help::add_days( shift, $self->serialize() );
 
 	if ( ! Help::is_good_date( @ymd ) )
 	{
-		die( "Internal error." );
+		# die( "Internal error." );
+		return undef;
 	}
 
 	return $self->deserialize( @ymd );
@@ -329,4 +397,3 @@ if ( $@ )
 	exit 2;	
 }
 
-1;
