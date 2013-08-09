@@ -1,0 +1,4 @@
+cycle
+$cycle = {};
+my $x = {a => $cycle};
+$cycle->{b} = $x;

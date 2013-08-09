@@ -1,0 +1,40 @@
+entry_point
+{
+	package MyObject;
+
+    sub new {
+        bless({}, shift);
+    }
+
+    sub get_struct {
+        sub {}
+    }
+
+    package MyObjectArray;
+
+    our @ISA = qw(MyObject);
+
+    sub get_struct {
+        [ qw|1 2 3| ]
+    }
+
+    package MyObjectHash;
+
+    our @ISA = qw(MyObject);
+
+    sub get_struct {
+        { example => 42 }
+    }
+}
+
+{
+    package main;
+
+    $entry_point = {
+        object       => MyObject->new,
+        object_array => MyObjectArray->new,
+        object_hash  => MyObjectHash->new
+    };
+}
+
+# vi: ft=perl
