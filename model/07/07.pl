@@ -53,7 +53,7 @@ sub dump {
 	}elsif($ref eq 'REF'){
 		$out = "REF:" . &dump($$var, $indent);
 	}elsif($ref && UNIVERSAL::can($var, "can") && $ref->can("get_struct")){
-		$out .= $var->get_struct();
+		$out .= &dump($var->get_struct(), $indent);
 	}elsif($ref){
 		$out .= $ref;
 	}else{
