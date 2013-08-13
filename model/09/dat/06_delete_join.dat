@@ -1,0 +1,73 @@
+localhost
+3306
+students
+student
+password
+
+-- sql
+drop table if exists `worker`
+-- end
+
+-- sql
+drop table if exists `salary`
+-- end
+
+-- sql
+create table `worker` (
+ id int unsigned not null auto_increment primary key,
+ name varchar(255) not null default ''
+) charset='utf8' engine=myisam
+-- end
+
+-- sql
+create table `salary` (
+ worker_id int unsigned not null default 0,
+ money int unsigned not null default 0,
+ key (worker_id)
+) charset='utf8' engine=myisam
+-- end
+
+-- sql
+insert into `worker`
+(name)
+values
+(?),
+(?),
+(?)
+-- param
+cono,anonymous,anonymous
+-- end
+
+-- sql
+insert into `salary`
+(worker_id, money)
+values
+(?, ?)
+-- param
+1,200
+2,300
+3,400
+-- end
+
+-- sql
+delete w
+from worker as w
+  join salary as s on (w.id = s.worker_id)
+where w.name = 'anonymous' and s.money > 300
+-- end
+
+-- sql
+select * from `worker`
+--end
+
+-- sql
+select * from `salary`
+-- end
+
+-- sql
+drop table `worker`
+--end
+
+-- sql
+drop table `salary`
+--end
