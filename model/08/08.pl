@@ -14,6 +14,7 @@ use warnings;
 		my $params_type = ref $params;
 		my($day, $month, $year, $weekday)=(localtime)[3,4,5,6];
 		$year += 1900;
+        ++$month;
 
 		if($params_type eq "HASH"){
 			$year =  $params->{year}  ? $params->{year}  : undef;
