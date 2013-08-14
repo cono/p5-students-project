@@ -127,9 +127,9 @@ eval{
 };
 
 if($@){ 
-  print "0 \n";
+  print "0\n";
   warn("$@\n");
 }else{
- print "\nMySh::>\n";
+ print "MySh::>\n";
  exit;
 };
