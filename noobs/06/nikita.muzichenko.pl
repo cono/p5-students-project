@@ -8,7 +8,7 @@ while (<FH>) {
 $_ =~ s/[\r\n]+$//s;
 $_=~s/\s*//; 
 	if($_=~/^$/){@arr=@arr1;@arr1=();next};
-	if($_ !~ /^[\d -]+$/){print STDOUT "ERROR\n";print STDERR "not correct simbol\n";exit }
+	if($_ !~ /^[\d -.]+$/){print STDOUT "ERROR\n";print STDERR "not correct simbol\n";exit }
 	else {@arr1=(@arr1,[split(/ +/,$_)])}
 }
 close(FH); 
