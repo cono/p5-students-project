@@ -169,4 +169,4 @@ while (<FH>) {
     }
 }
 
-print "MySh::>" and warn "Not valid comand file or last comand\n" and exit 0;
+print "MySh::>\n" and warn "Not valid comand file or last comand\n" and exit 0;
