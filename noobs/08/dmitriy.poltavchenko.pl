@@ -1,13 +1,10 @@
 #!/usr/bin/perl
 
-
-use strict;
 use warnings;
 
 {
 	package Date;
     use POSIX;
-    use Time::Local;
 	sub new {
 		my $class = shift;
 		my $self = shift;
@@ -40,20 +37,30 @@ use warnings;
             }
             return undef if (! $self->{$key} =~ m/^\d+/);
         }
+        my $buff = strftime("year>%Y,month>%m,day>%d", 0, 0, 0, $self->{day}, $self->{month}-1, $self->{year} - 1900, -1, -1, -1);
+        $self = {split /[,>]/, $buff};
 		bless $self, $class;
 		return $self;
 	}
 
 	sub get_struct {
 		my $self = shift;
-		return $self->{"year"}."/".$self->{"month"}."/".$self->{"day"};
+		return $self->{"year"}."/".int($self->{"month"})."/".int($self->{"day"});
 	}
     
 	sub year {
 		my $self = shift;
-        my $oldval = $self->{year};
 		if(@_){
-			$self->{year} = shift;
+            my $tmp = shift;
+            if ($tmp =~ m/^[\d]+/) {
+                my $buff = strftime("year>%Y,month>%m,day>%d", 0, 0, 0, $self->{day}, $self->{month}-1, $tmp - 1900, -1, -1, -1);
+                my %hash = split /[,>]/, $buff;
+                foreach my $key (keys %hash) {
+                    $self->{$key} = $hash{$key};
+                }
+            } else {
+                warn("Cannot add years");
+            }
 		}
 		return $self->{year};
 	}
@@ -61,33 +68,56 @@ use warnings;
 	sub month {
 		my $self = shift;
 		if(@_){
-			$self->{month} = shift;
+            my $tmp = shift;
+            if ($tmp =~ m/^[\d]+/) {
+                my $buff = strftime("year>%Y,month>%m,day>%d", 0, 0, 0, $self->{day}, $tmp-1, $self->{year} - 1900, -1, -1, -1);
+                my %hash = split /[,>]/, $buff;
+                foreach my $key (keys %hash) {
+                    $self->{$key} = $hash{$key};
+                }
+            } else {
+                warn("Cannot add years");
+            }
 		}
-		return $self->{month};
+		return int($self->{month});
 	}
     
 	sub day {
 		my $self = shift;
 		if(@_){
-			$self->{day} = shift;
+            my $tmp = shift;
+            if ($tmp =~ m/^[\d]+/) {
+                my $buff = strftime("year>%Y,month>%m,day>%d", 0, 0, 0, $tmp, $self->{month}-1, $self->{year} - 1900, -1, -1, -1);
+                my %hash = split /[,>]/, $buff;
+                foreach my $key (keys %hash) {
+                    $self->{$key} = $hash{$key};
+                }
+            } else {
+                warn("Cannot add years");
+            }
 		}
-		return $self->{day};
+		return int($self->{day});
 	}
 
 }
 {
 	package Calendar;
     use POSIX;
-    use Time::Local 'timelocal_nocheck';
     our @ISA = ('Date');
      
 	sub add_years {
 		my $self = shift;
 		if(@_){
             my $tmp = shift;
-            $self->{year} = int(strftime("%Y", 0, 0, 0, $self->{day}, $self->{month}-1, $self->{year}+$tmp - 1900, -1, -1, -1));
-            $self->{month} = int(strftime("%m", 0, 0, 0, $self->{day} , $self->{month}-1, $self->{year}+$tmp - 1900, -1, -1, -1));
-            $self->{day} = int(strftime("%d", 0, 0, 0, $self->{day} , $self->{month}-1, $self->{year}+$tmp - 1900, -1, -1, -1));
+            if ($tmp =~ m/^[\d]+/) {
+                my $buff = strftime("year>%Y,month>%m,day>%d", 0, 0, 0, $self->{day}, $self->{month}-1, $self->{year}+$tmp - 1900, -1, -1, -1);
+                my %hash = split /[,>]/, $buff;
+                foreach my $key (keys %hash) {
+                    $self->{$key} = $hash{$key};
+                }
+            } else {
+                warn("Cannot add years");
+            }
 		}
 		return $self;
 	}
@@ -96,9 +126,15 @@ use warnings;
 		my $self = shift;
 		if(@_){
             my $tmp = shift;
-            $self->{year} = int(strftime("%Y", 0, 0, 0, $self->{day}, $self->{month}-1+$tmp, $self->{year} - 1900, -1, -1, -1));
-            $self->{month} = int(strftime("%m", 0, 0, 0, $self->{day} , $self->{month}-1+$tmp, $self->{year} - 1900, -1, -1, -1));
-            $self->{day} = int(strftime("%d", 0, 0, 0, $self->{day} , $self->{month}-1+$tmp, $self->{year} - 1900, -1, -1, -1));
+            if ($tmp =~ m/^[\d]+/) {
+                my $buff = strftime("year>%Y,month>%m,day>%d", 0, 0, 0, $self->{day}, $self->{month}-1+$tmp, $self->{year} - 1900, -1, -1, -1);
+                my %hash = split /[,>]/, $buff;
+                foreach my $key (keys %hash) {
+                    $self->{$key} = $hash{$key};
+                }
+            } else {
+                warn("Cannot add months");
+            }
 		}
 		return $self;
 	}
@@ -107,12 +143,15 @@ use warnings;
 		my $self = shift;
 		if(@_){
             my $tmp = shift;
-            #my $unixtime = timelocal_nocheck(0,0,0,$self->{day} + $tmp,$self->{month},$self->{year});
-            #my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($unixtime);
-            $self->{year} = int(strftime("%Y", 0, 0, 0, $self->{day}+$tmp , $self->{month}-1, $self->{year} - 1900, -1, -1, -1));
-            $self->{month} = int(strftime("%m", 0, 0, 0, $self->{day}+$tmp , $self->{month}-1, $self->{year} - 1900, -1, -1, -1));
-            $self->{day} = int(strftime("%d", 0, 0, 0, $self->{day}+$tmp , $self->{month}-1, $self->{year} - 1900, -1, -1, -1));
-            #print int(strftime("%m", 0, 0, 0, $mday , $mon-1, $year, -1, -1, -1));
+            if ($tmp =~ m/^[\d]+/) {
+                my $buff = strftime("year>%Y,month>%m,day>%d", 0, 0, 0, $self->{day}+$tmp, $self->{month}-1, $self->{year} - 1900, -1, -1, -1);
+                my %hash = split /[,>]/, $buff;
+                foreach my $key (keys %hash) {
+                    $self->{$key} = $hash{$key};
+                }
+            } else {
+                warn("Cannot add days");
+            }
 		}
 		return $self;
 	}
