@@ -102,8 +102,8 @@ eval{
   open( GH, "<", "$test_file_path");
   while(<GH>){
     if($_=~ m/\|$/g){print "0\n"; next;};
+    $_ =~ s/\n//g;
     print "MySh::>$_";
-    $_ =~ s/\n/;/g;
     next if($_ eq ';');
     $_ =~ s/\|/; /g;
     $_ =~ s/\s(>)/ ; Writen /g;
