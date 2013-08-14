@@ -1,19 +1,24 @@
 #!/usr/bin/perl -w
 use strict;
-#use Switch;
-#use List::MoreUtils qw(firstidx);
-
-sub firstidx(&@) {
-    my $s = shift;
-
-    for my $i (@_) {
-        return $i if $s->($i);
-    }
-}
+use Switch;
 
 my @symbols = ('0','1','2','3','4','5','6','7','8','9',
                  'A','B','C','D','E','F','G','H','I','J','K','L','M',
                  'N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+
+sub index_of_array {
+    if (!defined $_[0]) {
+        print STDERR "Error! index_of_array require a parameter";
+        return -2;
+    }
+    
+    for (my $i=0; $i < $#symbols + 1; $i++) {
+        if ( $_[0] eq $symbols[$i] ) {
+            return $i;
+        }
+    }
+    return -1;
+}
 
 sub number_base_check {
     my $res = 1;
@@ -24,8 +29,8 @@ sub number_base_check {
         
         my $len = length($number) - 1; 
         for ( my $i = 0; $i <= $len; $i++ ) {
-            my $num = firstidx { $_ eq substr( $number, $i, 1 ) } @symbols;
-            if ( $num >= $base) {
+            my $num = index_of_array(substr( $number, $i, 1 ));
+            if ( $num >= $base || $num < 0) {
                 $res = undef;
                 last;
             }
@@ -65,7 +70,7 @@ sub any2dec {
         
         my $len = length($number) - 1; 
         for ( my $i = 0; $i <= $len; $i++ ) {
-            my $num = firstidx { $_ eq substr( $number, $i, 1 ) } @symbols;
+            my $num = index_of_array(substr( $number, $i, 1 ));
             $tmp = $tmp + $num * ($base**($len-$i));
         }
         return $tmp;
@@ -80,30 +85,37 @@ open( FH, "<", "$test_file_path") or die "Can not open test file: $!";
 
 while ( my $str = <FH> ) {
     # < обработка >
-    $str =~ s/\s*//g;
+    $str =~ s/\s*,\s*/,/g;
+    $str =~ s/^\s*//g;
+    $str =~ s/\s*$//g;
     $str = uc($str);
+    
     my ($a, $b, $c) = split(",", $str);
-    if (defined $a && defined $b && defined $c) {
-        if ($a == 1) {
-            if ( number_base_check($b, 10) ) {
-                my $number = dec2any($b, $c);
-                print STDOUT "$number\n";
-            } else {
-                print STDOUT "Error\n";  
-                print STDERR "Check number notation\n"; 
+    if (defined $a && defined $b && defined $c &&
+    $a ne "" && $b ne "" && $c ne "") {
+        switch ($a) {
+            case 1 {
+                if ( number_base_check($b, 10) ) {
+                    my $number = dec2any($b, $c);
+                    print STDOUT "$number\n";
+                } else {
+                    print STDOUT "Error\n";  
+                    print STDERR "Check number notation\n"; 
+                }
             }
-        } elsif ($a == 2) {
-            if ( number_base_check($b, $c) ) {
-                my $number = any2dec($b, $c);
-                print STDOUT "$number\n";
-            } else {
+            case 2 {
+                if ( number_base_check($b, $c) ) {
+                    my $number = any2dec($b, $c);
+                    print STDOUT "$number\n";
+                } else {
+                    print STDOUT "Error\n"; 
+                    print STDERR "Check number notation\n";  
+                }
+            }
+            else {
                 print STDOUT "Error\n"; 
-                print STDERR "Check number notation\n";  
+                print STDERR "Operation not supported\n";    
             }
-        }
-        else {
-            print STDOUT "Error\n"; 
-            print STDERR "Operation not supported\n";    
         }
     } else {
         print STDOUT "Error\n";
