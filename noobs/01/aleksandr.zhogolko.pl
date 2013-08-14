@@ -4,6 +4,7 @@ open(F1, $ARGV[0]) or die "Open file data error\n $!";
 @file = <F1>;
 close(F1) or die $!;
 if ( scalar(@file) == 0) {
+	print "Error\n";
 	print STDERR "File $ARGV[0] no data\n";
 }
 else {
@@ -44,6 +45,12 @@ else {
 							if ( $toFromDec == 1 ) {
 								#from DEC
 								@result = ();
+								$ost = $x % $radix;
+								if ( $ost > 9 ) {
+									$ost = $extendData[$ost-10];
+								}
+								push @result, $ost;
+								$x = int( $x / $radix );
 								while ( $x != 0 ) {
 									$ost = $x % $radix;
 									if ( $ost > 9 ) {
@@ -71,22 +78,27 @@ else {
 							}
 						}
 						else {
+							print "Error\n";
 							print STDERR "File $ARGV[0] data input error. Line $strN error. Data of the second parameter exceeds the radix\n"	
 						}
 					}
 					else {
+						print "Error\n";
 						print STDERR "File $ARGV[0] data input error. Line $strN error. Radix must be greater than 2 but less than 36\n"
 					}
 				}
 				else {
+					print "Error\n";
 					print STDERR "File $ARGV[0] data input error. Line $strN error.  The first parameter of translation in an incorrect value, the permissible value of 1 or 2\n"
 				}
 			}
 			else {
+				print "Error\n";
 				print STDERR "File $ARGV[0]. Line $strN. Digit data error\n";
 			}
 		}
 		else {
+			print "Error\n";
 			print STDERR "File $ARGV[0] data input error. Line $strN error. \n"
 		}
 		$strN++;
