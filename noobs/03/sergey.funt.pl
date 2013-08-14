@@ -3,7 +3,7 @@
 use strict;
 
 my $test_file_path = $ARGV[0];
-open( FH, "<", "test2.txt") or die "Can not open test file: $!";
+open( FH, "<", $test_file_path) or die "Can not open test file: $!";
 
 my $EnterPoint=<FH>;
 my $string=<FH>;
