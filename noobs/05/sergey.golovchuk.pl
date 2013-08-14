@@ -20,6 +20,8 @@ do {
 
 close ($fh);
 
+print "\n";
+
 package parser;
 
 sub get_commands(){
