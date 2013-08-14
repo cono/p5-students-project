@@ -3,68 +3,64 @@
 sub recursiveDumper {
     my $node = $_[0];
     my $split = $_[1];
+    my $used = $_[2];
     my $ref = ref($node);
 
-    if ($ref eq "") {
-        print $split.$node;
+    if (defined $node) {    
+        for (my $i=0; $i < scalar(@{$used}); $i++) {
+            if (@{$used}[$i] eq $node) {
+                print $ref;
+                return;
+            }
+        }
+        push(@{$used}, $node);
+    }
+    
+    if (not defined $node) {
+        print "''";
+    } elsif ($ref eq "") {
+        print "'".$node."'";
+    } elsif ($node =~ m/(.*)=(.*)/) {
+        print $node->get_struct();
     } elsif ($ref eq "ARRAY") {
         print "[\n";
         my $size = scalar(@{$node});
         for (my $i = 0; $i < $size; $i++) {
-            #print $split.$node->[$i];
             if (ref($node->[$i]) eq "") {
-                recursiveDumper("\'".$node->[$i]."\'", $split."\t");
+                print $split;
+                recursiveDumper($node->[$i], $split, $used);
             } else {
-                recursiveDumper($node->[$i], $split."\t");
+                print $split;
+                recursiveDumper($node->[$i], $split."\t", $used);
             }
             print "," if ($i+1 < $size);
             print "\n";
         }
+        $split =~ s/\t//;
         print $split."]";
     } elsif ($ref eq "HASH") {
         print "{\n";
         my $count = keys( $node );
         foreach my $key (sort keys $node) {
-            if (ref($node->{$key}) eq "ARRAY") {
-                print $split.$key." => ";
-                recursiveDumper($node->{$key}, $split);
-                
-            } elsif (ref($node->{$key}) eq "HASH") {
-                if ($key eq "ref_to_itself") {
-                    print $split.$key." => HASH".",\n";
-                    --$count;
-                    next;
-                }
-                print $split.$key." => ";
-                recursiveDumper($node->{$key}, "\t".$split);
-            } elsif ($key eq "hash_obj" || $key eq "array_obj") {
-                my $buff = $key." => ".$node->{$key}->get_struct();
-                recursiveDumper($buff, $split);
-                #print ",\n"; 
-            }
-            elsif (ref($node->{$key}) eq "") {
-                my $buff = $key." => \'".$node->{$key}."\'";
-                recursiveDumper($buff, $split);
-                #print ",\n"; 
+            if (ref($node->{$key}) eq "") {
+                my $buff = $split.$key." => \'".$node->{$key}."\'";
+                print $buff;
             } else {
                 print $split.$key." => ";
-                recursiveDumper($node->{$key}, "");
+                recursiveDumper($node->{$key}, $split."\t", $used);
             }
             print "," if (--$count > 0);
             print "\n"; 
         }
         $split =~ s/\t//;
         print $split."}";
-    } elsif ($ref eq "CODE") {
-        print "CODE";
+    } elsif ($ref eq "SCALAR") {
+        print "'$$node'";
     } elsif ($ref eq "REF") {
         print "REF:";
-        recursiveDumper($$node, $split."\t");
-        #print $split.ref ($node->{$key})."\n";
-    } elsif ($ref eq "SCALAR") {
-        print "'scalar_variable'";
-    } elsif ($ref eq "Regexp") {
-        print "Regexp"."";
+        recursiveDumper($$node, $split, $used);
+    } else { # CODE, Regexp, GLOB, LVALUE, FORMAT, IO, VSTRING
+        print $ref;
     }
 }
 
@@ -90,8 +86,9 @@ if ($@) {
     warn("$@");
     exit 1;
 }
-#print Dumper $$ptrname;
-recursiveDumper($$ptrname, "\t");
+
+#recursiveDumper([1,undef,3,{1 => 2, 3 => 3},5,6], "\t", []);
+recursiveDumper($$ptrname, "\t", []);
 print "\n";
 
 exit 0;
