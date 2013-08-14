@@ -56,6 +56,7 @@ open( FH, "<", "$test_file_path" ) or die "Can not open test file: $!";
 while (<FH>) {
 
 	my @res = &namber();
+	if($res[0] eq ""){$res[0]=0};
 	print STDOUT "$res[0]\n";
 	print STDERR "$res[1]\n" if ( $res[0] eq 'Error' );
 }
