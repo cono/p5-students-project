@@ -48,7 +48,7 @@ sub hash() {
 		print STDOUT "-" . $el;
 		$hash{$start} = '?';
 
-		if ( $hash{$el} eq '?' ) { print "\nlooped\n"; return }
+		if ( $hash{$el} eq '?' ) { print "\nlooped"; return }
 		@start = ( @arr . $el );
 		$start = $el;
 	}
