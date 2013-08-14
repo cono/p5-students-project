@@ -64,7 +64,7 @@ sub findpath
   my @elempath;
 
   if (!defined($path{$start})){
-        printError("Starting point is not contained in the hash");
+        print STDOUT $start;
         return;
   }
   
