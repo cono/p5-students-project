@@ -3,7 +3,7 @@ use strict;
 
 sub getAmount() {
 	my %hash = ();
-	if ( substr( $_, -1 ) eq " " ) {
+	if ( substr( $_[0], -1 ) eq " " ) {
 		$! = "(' ') incorrect symbol";
 		return %hash;
 	}
@@ -19,7 +19,7 @@ sub getAmount() {
 }
 my $test_file_path = $ARGV[0];
 open( FH, "<", "$test_file_path" ) or die "Can not open test file: $!";
-while (<FH>) {
+while (<FH>) {chomp;
 	my %res = getAmount();
 	unless (  keys %res ) { print STDOUT "error\n"; print STDERR "$!\n" }
 	else {
