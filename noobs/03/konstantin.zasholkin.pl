@@ -64,7 +64,7 @@ sub findpath
   my @elempath;
 
   if (!defined($path{$start})){
-        print STDOUT $start;
+        print STDOUT "$start\n";
         return;
   }
   
