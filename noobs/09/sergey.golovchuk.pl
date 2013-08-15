@@ -76,6 +76,8 @@ while ($queries =~ m /(?:-- sql)(.*?)(?:-- end)/gs){
 	push (@$records, $query);
 }
 
+&ERROR("no data!", \$dbh) if not scalar(@$records);
+
 foreach my $record (@$records){
 
 	my $query = $record->{'query'};
