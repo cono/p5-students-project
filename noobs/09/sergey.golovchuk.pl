@@ -76,25 +76,25 @@ while ($queries =~ m /(?:-- sql)(.*?)(?:-- end)/gs){
 	push (@$records, $query);
 }
 
-&ERROR("no data!", \$dbh) if not scalar(@$records);
+&ERROR("no data!") if not scalar(@$records);
 
 foreach my $record (@$records){
 
 	my $query = $record->{'query'};
 	my $params = $record->{'params'};
 	
-	my $sth = $dbh->prepare($query) or &ERROR("Couldn't prepare statement!", \$dbh);
+	my $sth = $dbh->prepare($query) or &ERROR("Couldn't prepare statement!");
 
 	if (scalar(@$params)){
 	
 		foreach my $param (@$params){
 			
-			$sth->execute(@$param) or &ERROR("Couldn't execute statement!", \$dbh);
+			$sth->execute(@$param) or &ERROR("Couldn't execute statement!");
 
 			
 			if ($sth->err){
 				
-				&ERROR($sth->errstr(), \$dbh);
+				&ERROR($sth->errstr());
 			} elsif ($query =~ m/select/i) {
 				
 				while(my @ans = $sth->fetchrow_array()){
@@ -106,11 +106,11 @@ foreach my $record (@$records){
 		}
 	} else {
 		
-		$sth->execute() or &ERROR("Couldn't execute statement!", \$dbh);
+		$sth->execute() or &ERROR("Couldn't execute statement!");
 
 		if ($sth->err){
 			
-			&ERROR($sth->errstr(), \$dbh);
+			&ERROR($sth->errstr());
 		} elsif ($query =~ m/select/i) {
 				
 			while(my @ans = $sth->fetchrow_array()){
@@ -127,15 +127,9 @@ $dbh->disconnect();
 sub ERROR{
 	
 	my $msg = shift();
-	my $dbh = shift();
-	
-	if (defined $$dbh){
-		$$dbh->disconnect();
-	}
-	
+
 	print STDOUT "0\n";
 	print STDERR $msg."\n";
 	exit 1;	
 }
 
-# $rv  = $dbh->do($statement, \%attr, @bind_values);
