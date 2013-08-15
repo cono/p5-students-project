@@ -60,7 +60,7 @@ sub my_Dumper{
 	
 	if (ref($value) eq "SCALAR"){
 		
-		print STDOUT "\'$$value\'";
+		print STDOUT "\'".$$value."\'";
 	} elsif (ref($value) eq "ARRAY"){
 		
 		if (exists($refs{$value})){
