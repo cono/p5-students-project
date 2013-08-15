@@ -60,7 +60,7 @@ foreach (@instructions){
 }
 
 foreach (reverse sort keys %instructions){
-	
+
 	$instructions{$_} =~ tr/a-z0-9/A-Z&-\//;
 	$target =~ s/$_/$instructions{$_}/g;
 }
