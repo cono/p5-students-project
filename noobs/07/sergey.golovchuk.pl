@@ -120,7 +120,11 @@ sub my_Dumper{
 		
 	} elsif (ref($value) ne ""){
 		
-		print STDOUT $value->get_struct;
+		if ($value->get_struct() ne ""){
+			&my_Dumper($deep, $value->get_struct());
+		} else {
+			print STDOUT "\'".$value->get_struct()."\'";
+		}
 	} else {
 		defined($value)? print STDOUT "\'$value\'" : print STDOUT "''";
 	}
