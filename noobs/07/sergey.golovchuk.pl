@@ -126,6 +126,6 @@ sub my_Dumper{
 			print STDOUT "\'".$value->get_struct()."\'";
 		}
 	} else {
-		defined($value)? print STDOUT "\'$value\'" : print STDOUT "''";
+		defined($value)? print STDOUT "\'".$value."\'" : print STDOUT "''";
 	}
 }
