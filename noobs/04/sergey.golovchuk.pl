@@ -55,7 +55,7 @@ foreach (@instructions){
 	
 		print STDOUT "0\n";
 		print STDERR "Incorrect hash pair or wrong quotes or splitter!\n";
-		exit 1;
+		exit 1; 
 	}
 }
 
