@@ -43,7 +43,7 @@ $instructions =~ s/#.*?\n/\n/g;
 
 $instructions =~ s/^\s+|\s+$//;
 
-@instructions = split(/\n*/,$instructions);
+@instructions = split(/\n+/,$instructions);
 
 foreach (@instructions){
 
