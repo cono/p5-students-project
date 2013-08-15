@@ -151,7 +151,7 @@ sub Observe()
 	}
 	else 
 	{		
-		$result .= $param->get_struct();
+		$result .= "'".$param->get_struct()."'";
 	}
 	
 	return $result;
