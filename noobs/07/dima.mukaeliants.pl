@@ -55,9 +55,9 @@ sub recursia {
 	elsif(ref $element eq 'Regexp'){print "Regexp";}
 	elsif(ref $element eq 'SCALAR'){print "'".$$element."'";}
 	elsif( ref $element && (ref $element ne 'GLOB' || ref $element ne 'LVALUE' || ref $element ne 'FORMAT' 
-							|| ref $element ne 'IO' || ref $element ne 'VSTRING') ){print $element->get_struct;}
+							|| ref $element ne 'IO' || ref $element ne 'VSTRING') ){print "'".$element->get_struct."'"}
 	else{print "'".$element."'";}
-	if($flag){print "\n";}
+	if($flag && ref $element ne 'REF'){print "\n";}
 	elsif(ref $element ne 'REF'){print $comma."\n";}
 	$comma = ',';
 }
