@@ -13,7 +13,7 @@ my $res='';
 my $errdesc='';
 my $i=0;
 my $i1=0;
-if (length($line)==0){$flag=0;print "1";}
+if (length($line)==0){$flag=0;}
 for ($i=0;$i<scalar(@check);$i++)
 {
 	my $tf=0;
@@ -21,7 +21,7 @@ for ($i=0;$i<scalar(@check);$i++)
 	{
 		if ($check[$i] eq $chm[$i1]){$tf=1;}
 	}
-	if ($tf==0){$flag=0;print "2";}
+	if ($tf==0){$flag=0;}
 }
 if ($flag==1)
 {
@@ -41,22 +41,23 @@ if ($flag==1)
 		{
 			$hash{$work[$i]}+=1;
 		}
-		
+
 		}
 	}
 	my @arr=keys %hash;
 	@arr=sort @arr;
 	for ($i=0;$i<scalar(@arr);$i++)
 	{
-		$res="$res "."$arr[$i] ".("*"x$hash{$arr[$i]})."\n";
+		#$res="$res "."$arr[$i] ".("*"x$hash{$arr[$i]})."\n";
+		print STDOUT $arr[$i]." ".("*"x$hash{$arr[$i]})."\n";
 	}
-	
+
 }
 elsif ($flag==0)
 {
 	$res="error";
 	$errdesc="Empty line or not allowed element";
 }
-print STDOUT "$res\n";
+#print STDOUT "$res";
 print STDERR "$errdesc\n" if ( $res eq 'error' );
 close ( FH );
