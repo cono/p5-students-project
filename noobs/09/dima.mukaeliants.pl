@@ -14,7 +14,7 @@ for my $i (0..4){
 	my $paramsString = <FH>;
 	if($paramsString =~ /^\s+?$/){print STDOUT "0\n"; die "Empty parameters string [$i].";}
 	elsif($paramsString !~ /^[\w\.]+?$/){print STDOUT "0\n"; die "Wrong symbols in parameters string [$i].";}
-	else{push @connectionParams, $paramsString}
+	else{ $paramsString =~ s/\n$//; push @connectionParams, $paramsString }
 }
 if(scalar @connectionParams != 5){print STDOUT "0\n"; die "Incorrect number of connection parameters.";}
 
@@ -57,8 +57,8 @@ unless( close ( FH ) ){print STDOUT "0\n"; die "Can not clouse file: $!";}
 
 my($host, $port, $db, $user, $password) = @connectionParams;
 my $dsn = "DBI:mysql:database=$db;host=$host;port=$port";
-$user = "root";
-$password = "PerlStudent";
+#$user = "root";
+#$password = "PerlStudent";
 my $dbh;
 eval { $dbh = DBI->connect($dsn, $user, $password, { RaiseError => 1, PrintError => 0 } ) };
 if($@){print STDOUT "0\n"; die "Unable to connect:\n$@"} #$DBI::errstr
@@ -83,15 +83,15 @@ foreach my $block (@{$blocksArray}){
 			my $sth = $dbh->prepare("$query");
 			if($block->{values}){
 				my $paramsArr = $block->{values};
-				foreach my $params (@$paramsArr){ $sth->execute( @$params ) }
+				foreach my $params (@$paramsArr){
+					$sth->execute( @$params );
+					while (my $ans = $sth->fetchrow_arrayref) { print STDOUT join('|', @$ans)."\n" };
+				}
 			}
-			else{ $sth->execute() }
-			#while (my $ans = $sth->fetchrow_hashref) {
-			while (my $ans = $sth->fetchrow_arrayref) {
-				#my @val = ();
-				#foreach my $key (sort keys %{$ans}){ push @val, ${$ans}{$key}; }
-				print STDOUT join('|', @$ans)."\n";
-			}
+			else{
+				$sth->execute();
+				while (my $ans = $sth->fetchrow_arrayref) { print STDOUT join('|', @$ans)."\n" };
+			};
 			$sth->finish;
 		}
 		
