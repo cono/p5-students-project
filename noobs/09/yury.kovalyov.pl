@@ -207,11 +207,11 @@ sub parse
 			$lines 							# MEMO: handle multiline SQL-comments on the top of this regexp	
 			=~ 
 			m/(
-					(?:^--\ sql[^\n]*\n)	(?{ $command = 'sql'; })
+					(?:^--\s*sql[^\n]*\n)	(?{ $command = 'sql'; })
 				|
-					(?:^--\ param[^\n]*\n)	(?{ $command = 'param'; })
+					(?:^--\s*param[^\n]*\n)	(?{ $command = 'param'; })
 				|
-					(?:^--\ end[^\n]*\n)	(?{ $command = 'end'; })
+					(?:^--\s*end[^\n]*\n)	(?{ $command = 'end'; })
 				|
 					(?:[^\n]*\n)			### lets eat blank lines
 				|
@@ -378,7 +378,7 @@ sub handle
 
 					while ( my @row = $sth->fetchrow_array )
 					{
-						print join( '|', map { $_ // 'NULL' } @row ) ."\n";
+						print join( '|', map { $_ // '' } @row ) ."\n";
 					}
 
 				}
@@ -405,7 +405,7 @@ sub handle
 
 				while ( my @row = $sth->fetchrow_array )
 				{
-					print join( '|', map { $_ // 'NULL' } @row ) ."\n";
+					print join( '|', map { $_ // '' } @row ) ."\n";
 				}
 
 			}
