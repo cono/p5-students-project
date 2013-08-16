@@ -36,7 +36,7 @@ my $rows1 = (scalar(@matrix1)-1);
 my $rows2 = (scalar(@matrix2)-1);
 my $cols1 = (scalar(@$temp1)-1);
 my $cols2 = (scalar(@$temp2)-1);
-if($rows1 == $cols2){
+if($cols1 == $rows2){
 	for my $i ( 0..$rows1 ){
 		my $string = '';
 		for my $j ( 0..$cols2 ){
@@ -48,4 +48,4 @@ if($rows1 == $cols2){
 		print STDOUT "$string\n";
 	}
 }
-else{print STDOUT "ERROR\n"; print STDERR "ERROR: [$test_file_path] : Rows matrix1 != Cols matrix2.\n"; exit;}
+else{print STDOUT "ERROR\n"; print STDERR "ERROR: [$test_file_path] : Cols matrix1 != Rows matrix2.\n"; exit;}
