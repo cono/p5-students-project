@@ -83,7 +83,7 @@ sub _blessed
 
 	my $res = "";	
 
-	$res .= printt() . "$name => " . $data->get_struct();
+	$res .= printt() . "$name => " . "'" . $data->get_struct() . "'";
 
 	return $res;
 }
@@ -322,7 +322,7 @@ sub build_code
 	my $code_footer = $footer;
 	$code_footer =~ s/\$VAR/$var_name/g;
 
-	my $code = $code_header . $driver_code . $code_footer;
+	my $code = $code_header . "$driver_code;\n" . $code_footer;
 
 	return $code;
 }
