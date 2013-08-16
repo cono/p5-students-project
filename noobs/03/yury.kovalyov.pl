@@ -224,7 +224,7 @@ my ($head,$hash) = initialize();
 
 	if ( my $noEntryElement = ( !defined($start) && !defined($loop) ) )
 	{
-		printe "No sush entry point! Check test file data, please.\n";
+		print "$head\n";#In accordance to a convention - we have to print not a path but entry point
 		last;
 	}
 
