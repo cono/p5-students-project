@@ -21,46 +21,6 @@ for linux - situation is more complicated.
 All 'sort'-utilities produces *differnt* output (details are in the code) 
 even with the simplest text files e.g.:
 = = = = = = = =
-HL-DT-ST DVDRAM GSA-T20N WR02 (ATA)
-Current Profile: CD-R
-
-Disc Information:
-Status: Complete
-State of Last Session: Complete
-Erasable: No
-Sessions: 1
-Sectors: 303�637
-Size: 621�848�576 bytes
-Time: 67:30:37 (MM:SS:FF)
-MID: 97m27s18f (Plasmon Data Systems)
-Supported Write Speeds: 10x; 16x; 24x
-
-TOC Information:
-Session 1... (LBA: 0 / 00:02:00)
--> Track 01  (Mode 1, LBA: 0 / 00:02:00)
--> LeadOut  (LBA: 303637 / 67:30:37)
-
-ATIP Information:
-Disc ID: 97m27s18f
-Manufacturer: Plasmon Data Systems
-Start Time of LeadIn: 97m27s18f
-Last Possible Start Time of LeadOut: 79m59s74f
-
-Performance (Write Speed):
-Descriptor 1...
--> B0: 0x02; B1: 0x00; B2: 0x00; B3: 0x00
--> EL: 303636 (0x0004A214)
--> RS: 1�827 KB/s (10,4x) - WS: 1�764 KB/s (10x)
-Descriptor 2...
--> B0: 0x02; B1: 0x00; B2: 0x00; B3: 0x00
--> EL: 303636 (0x0004A214)
--> RS: 1�827 KB/s (10,4x) - WS: 2�822 KB/s (16x)
-Descriptor 3...
--> B0: 0x02; B1: 0x00; B2: 0x00; B3: 0x00
--> EL: 303636 (0x0004A214)
--> RS: 1�827 KB/s (10,4x) - WS: 4�234 KB/s (24x)
-
-
 
 = = = = = = = =
 - probably because of 'use locale' (+'open'?) but the issue was not resolved and 
