@@ -60,7 +60,7 @@ sub sql_exe
       
       while (@rows = $sth->fetchrow_array) {
         for my $i(0..scalar(@rows)-1) {
-          if( !defined($rows[$i]) ) { $rows[$i] = "NULL" }
+          if( !defined($rows[$i]) ) { $rows[$i] = "" }
         }
         print join("|", @rows)."\n";
       }
@@ -103,7 +103,7 @@ sub sql_param_exe
       
         while (@rows = $sth->fetchrow_array) {
           for my $i(0..scalar(@rows)-1) {
-            if( !defined($rows[$i]) ) { $rows[$i] = "NULL" }
+            if( !defined($rows[$i]) ) { $rows[$i] = "" }
           }
           print join("|", @rows)."\n";
         }
