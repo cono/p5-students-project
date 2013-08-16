@@ -45,7 +45,7 @@ sub bless_sub
 
   my $result = "";	
 
-  $result = $result . printTabs() . "$name => " . $data->get_struct();
+  $result = $result . printTabs() . "$name => " . "'" . $data->get_struct() . "'";
 
   return $result;
 }
@@ -201,7 +201,7 @@ sub form
   $linetop =~ s/\$VAR/$param/g;
   $linebottom =~ s/\$VAR/$param/g;
 
-  my $code = $linetop . $name_sub . $linebottom;
+  my $code = $linetop . "$name_sub;\n" . $linebottom;
 
   return $code;
 }
