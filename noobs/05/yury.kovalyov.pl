@@ -29,8 +29,8 @@ Status: Complete
 State of Last Session: Complete
 Erasable: No
 Sessions: 1
-Sectors: 303ÿ637
-Size: 621ÿ848ÿ576 bytes
+Sectors: 303ï¿½637
+Size: 621ï¿½848ï¿½576 bytes
 Time: 67:30:37 (MM:SS:FF)
 MID: 97m27s18f (Plasmon Data Systems)
 Supported Write Speeds: 10x; 16x; 24x
@@ -50,15 +50,15 @@ Performance (Write Speed):
 Descriptor 1...
 -> B0: 0x02; B1: 0x00; B2: 0x00; B3: 0x00
 -> EL: 303636 (0x0004A214)
--> RS: 1ÿ827 KB/s (10,4x) - WS: 1ÿ764 KB/s (10x)
+-> RS: 1ï¿½827 KB/s (10,4x) - WS: 1ï¿½764 KB/s (10x)
 Descriptor 2...
 -> B0: 0x02; B1: 0x00; B2: 0x00; B3: 0x00
 -> EL: 303636 (0x0004A214)
--> RS: 1ÿ827 KB/s (10,4x) - WS: 2ÿ822 KB/s (16x)
+-> RS: 1ï¿½827 KB/s (10,4x) - WS: 2ï¿½822 KB/s (16x)
 Descriptor 3...
 -> B0: 0x02; B1: 0x00; B2: 0x00; B3: 0x00
 -> EL: 303636 (0x0004A214)
--> RS: 1ÿ827 KB/s (10,4x) - WS: 4ÿ234 KB/s (24x)
+-> RS: 1ï¿½827 KB/s (10,4x) - WS: 4ï¿½234 KB/s (24x)
 
 
 
@@ -1150,5 +1150,11 @@ while ( <> )
 
 	print PROMPT;
 };
+
+# fix of artificial condition
+if ( $batch_mode )
+{
+	print "\n";
+}
 
 1;
