@@ -13,13 +13,13 @@ my @outputArr;
 
 foreach my $i (@arr){
 	if($i !~ /^[a-zA-Z0-9]+$/){
-		$res = 'error';
+		$res = "error\n";
 		$errType = "Symbols array haw non-alphanumeric element(s). Element = $i \n";
 	}
 }
 if(!$errType){
 	for (my $i=0; $i<(scalar(@arr)); $i++){
-		#ìîæíî c öèêëîì
+		#Ð¼Ð¾Ð¶Ð½Ð¾ c Ñ†Ð¸ÐºÐ»Ð¾Ð¼
 		my $tmpHashVal = '';
 		for (my $elmCount=0; $elmCount<scalar(@arr); $elmCount++){
 			if($arr[$i] eq $arr[$elmCount]){
@@ -27,8 +27,8 @@ if(!$errType){
 			}
 		}
 		$hash{$arr[$i]} = $tmpHashVal;
-		#à ìîæíî è áåç íåãî
-		#áèòü ñòðîêó ñ ýëåìåíòàìè ïî òåêóùåìó ýëåìåíòó
+		#Ð° Ð¼Ð¾Ð¶Ð½Ð¾ Ð¸ Ð±ÐµÐ· Ð½ÐµÐ³Ð¾
+		#Ð±Ð¸Ñ‚ÑŒ ÑÑ‚Ñ€Ð¾ÐºÑƒ Ñ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°Ð¼Ð¸ Ð¿Ð¾ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ¼Ñƒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñƒ
 		my $tmp = '# '.join(' # ',@arr).' #';
 		my @tmp = split(' '.$arr[$i].' ', $tmp);
 		my $tmpSumm = scalar(@tmp) - 1;
@@ -47,7 +47,7 @@ if(!$errType){
 	}
 };
 
-print STDOUT "$res\n";
+print STDOUT "$res";
 print STDERR "ERROR: $test_file_path : $errType \n\n" if ( index(lc($res),'error') >= 0 );	
 
 close ( FH );
