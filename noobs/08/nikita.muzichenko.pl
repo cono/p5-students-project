@@ -74,7 +74,7 @@ sub add_days {
 		print STDERR $! = "outside the range";
 		return $self;
 	}
-	$self->{day} = $self->{day} + shift;
+	$self->{day} = $self->{day} + $add;
 	if ( $self->{day} > 31 || $self->{day} < 1 ) {
 		$self->{day} = $self->{day} - $add;
 		print STDERR $! = "outside the range";
