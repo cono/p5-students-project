@@ -20,6 +20,8 @@ do {
 
 close ($fh);
 
+print "\n";
+
 package parser;
 
 sub get_commands(){
@@ -130,7 +132,7 @@ sub my_sort{
 				$$dest =~ s/>//;
 				
 				open my $fh, ">", $$dest or return 0;
-				print $fh $_."\n" foreach (sort @$source);
+				print $fh $_ foreach (sort @$source);
 				close $fh;
 		
 			}
@@ -153,7 +155,7 @@ sub my_sort{
 				$$dest =~ s/>//;
 				
 				open my $fh, ">", $$dest or return 0;
-				print $fh $_."\n" foreach (sort @file);
+				print $fh $_ foreach (sort @file);
 				close $fh;
 		
 			}

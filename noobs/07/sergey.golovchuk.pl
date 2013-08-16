@@ -60,7 +60,7 @@ sub my_Dumper{
 	
 	if (ref($value) eq "SCALAR"){
 		
-		print STDOUT "\'$$value\'";
+		print STDOUT "\'".$$value."\'";
 	} elsif (ref($value) eq "ARRAY"){
 		
 		if (exists($refs{$value})){
@@ -120,8 +120,12 @@ sub my_Dumper{
 		
 	} elsif (ref($value) ne ""){
 		
-		print STDOUT $value->get_struct;
+		if ($value->get_struct() ne ""){
+			&my_Dumper($deep, $value->get_struct());
+		} else {
+			print STDOUT "\'".$value->get_struct()."\'";
+		}
 	} else {
-		defined($value)? print STDOUT "\'$value\'" : print STDOUT "''";
+		defined($value)? print STDOUT "\'".$value."\'" : print STDOUT "''";
 	}
 }

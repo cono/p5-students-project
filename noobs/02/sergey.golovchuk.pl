@@ -10,13 +10,13 @@ close FIN;
 chomp($file);
 
 if ($file =~ /^\s*$/){
-		print STDOUT "Error\n";
+		print STDOUT "error\n";
 		print STDERR "Empty file!\n";
 		exit 1;
 }
 
 if (index($file,"\n") != -1){
-		print STDOUT "Error\n";
+		print STDOUT "error\n";
 		print STDERR "More than one line in file! Or empty first line\n";
 		exit 1;
 }
@@ -27,7 +27,7 @@ foreach (@array){
 
 	if ($_ !~ m/^\w+$/){
 		
-		print STDOUT "Error\n";
+		print STDOUT "error\n";
 		print STDERR "Not a word symbol!\n";
 		exit 1;
 	}

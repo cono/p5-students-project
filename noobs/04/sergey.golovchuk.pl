@@ -43,7 +43,7 @@ $instructions =~ s/#.*?\n/\n/g;
 
 $instructions =~ s/^\s+|\s+$//;
 
-@instructions = split(/\n/,$instructions);
+@instructions = split(/\n+/,$instructions);
 
 foreach (@instructions){
 
@@ -60,8 +60,9 @@ foreach (@instructions){
 }
 
 foreach (reverse sort keys %instructions){
-	
+
+	$instructions{$_} =~ tr/a-z0-9/A-Z&-\//;
 	$target =~ s/$_/$instructions{$_}/g;
 }
-
+$target =~ tr/A-Z&-\//a-z0-9/;
 print STDOUT $target."\n";

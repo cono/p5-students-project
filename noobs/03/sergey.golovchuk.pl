@@ -20,13 +20,13 @@ $entry =~ s/^\s+|\s+$//g if defined($entry);
 
 if (!defined($entry) || $entry !~ m/^\w+$/){
 	
-	print STDOUT "Error\n";
+	print STDOUT "error\n";
 	print STDERR "There is no correct entry key!\n";
 	exit 1;
 }
 	
 if ($file =~ m/^\s*$/){
-	print STDOUT "Error\n";
+	print STDOUT "error\n";
 	print STDERR "No hash!\n";
 	exit 1;
 }
@@ -34,7 +34,7 @@ if ($file =~ m/^\s*$/){
 chomp($file);
 if (index($file, "\n") != -1){
 
-	print STDOUT "Error\n";
+	print STDOUT "error\n";
 	print STDERR "More than 2 lines!\n";
 	exit 1;
 }
@@ -47,7 +47,7 @@ foreach (@array){
 	if (defined($_) && $_ =~ m/^(\w+)\s*=>\s*(\w+)$/){
 		$hash{$1} = $2;
 	} else {
-		print STDOUT "Error\n";
+		print STDOUT "error\n";
 		print STDERR "Wrong pair/data or no data!\n";
 		exit 1;
 	}
@@ -76,4 +76,4 @@ while (1){
 }
 
 print STDOUT $out."\n";
-print STDERR $error."\n" if ($out eq "Error");
+print STDERR $error."\n" if ($out eq "error");

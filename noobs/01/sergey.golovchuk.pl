@@ -27,10 +27,11 @@ while(my $line = <FIN>){
 			} else {
 				$digit = uc $digit;
 				my @res = ();
-				for (my $i = 0; $digit; ++$i){
-					$res[$i] = $digit % $base;
+				my $i = 0;
+				do {
+					$res[$i++] = $digit % $base;
 					$digit = int ($digit / $base);
-				}
+				} while ($digit);
 				
 				@res = reverse @res;
 				
