@@ -1,6 +1,5 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w 
 use strict;
-use warnings;
 use DBI;
 
 my $query_file = $ARGV[0];
