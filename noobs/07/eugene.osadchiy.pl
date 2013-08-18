@@ -102,7 +102,7 @@ sub Dump {
 		if ( $@=~/unblessed/ ) {
 			return;
         } else {
-                print $_[0]->get_struct;
+                print "\'". $_[0]->get_struct . "\'";
 				return;
         }		
 	}
