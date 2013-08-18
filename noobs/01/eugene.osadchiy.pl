@@ -8,10 +8,13 @@ while ( <FH> ) {
 	my $res;
 	unless($_ eq "\r\n" || $_ eq "\n")
 	{
+		(my $a, my $b, my $notation);
 		chomp($_);
-		(my $a, my $b, my $notation) = (split /,/, $_);
-
-		if(!defined($a) || $a eq "" || !defined($b) || $b eq "" || !defined($notation) || $notation eq "")
+		if(/^\s*(\d+)\s*,\s*(\w+)\s*,\s*(\d+)\s*/)
+		{
+			($a, $b, $notation) = ($1, $2, $3);
+		}
+		else
 		{
 			print STDOUT "Error\n";
 			print STDERR "Error. $_. One or more fiels are undefined.\n";
