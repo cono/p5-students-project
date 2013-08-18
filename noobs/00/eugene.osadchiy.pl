@@ -25,28 +25,22 @@ while ( <FH> ) {
 			next;
 		}
 		
-		if($b==0)
-		{
-			my $x=sqrt(-$c / $a);
-			print STDOUT "2 ($x -$x)\n";
-		}
-		else
-		{
-			my $D = $b**2-4*$a*$c;
+		
+		my $D = $b**2-4*$a*$c;
 
-			if($D > 0) {
-				my $x1 = (-$b + sqrt($D)) / (2*$a);
-				my $x2 = (-$b - sqrt($D)) / (2*$a);
-				print STDOUT "2 ($x1 $x2)\n";
+		if($D > 0) {
+			my $x1 = (-$b + sqrt($D)) / (2*$a);
+			my $x2 = (-$b - sqrt($D)) / (2*$a);
+			print STDOUT "2 ($x1 $x2)\n";
+		} else {
+			if($D == 0) {
+				my $x = -$b / (2*$a);
+				print STDOUT "1 ($x)\n";
 			} else {
-				if($D == 0) {
-					my $x = -$b / (2*$a);
-					print STDOUT "1 ($x)\n";
-				} else {
-					print STDOUT "0\n";
-				}
-			}	
-		}
+				print STDOUT "0\n";
+			}
+		}	
+	
 	}
 	else
 	{
