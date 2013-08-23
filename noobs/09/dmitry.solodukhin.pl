@@ -99,7 +99,6 @@ eval{
   if(($user eq '') || ($password eq '') || ($base eq '') || ($host eq '') || ($port eq '')){
     die "неопределенны данные $user $password $base $host $port\n";
   };  
-     $password = '';
   my $db = BASEDO->new($host, $port, $base, $user, $password);
   my $i = 0;
   while (<FH>){
