@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w 
+#!/usr/bin/perl
 use strict;
 my $test_file_path = $ARGV[0];
 
@@ -64,7 +64,7 @@ package Shell{
       return "0" if($finder eq '');
       my @array;
       unless($_[1] eq ''){
-	Printer($_[1]);
+	    Printer($_[1]);
       }  
       @array = @fh; 
       return "0" unless(@array);
@@ -93,7 +93,7 @@ package Shell{
     
     #выход
     sub Exit{
-      print "\n";
+      #print "\n";
       exit;
     };
   }
@@ -103,7 +103,8 @@ eval{
   while(<GH>){
     if($_=~ m/\|$/g){print "0\n"; next;};
     $_ =~ s/\n//g;
-    print "MySh::>$_";
+    print "MySh::>$_\n";
+
     next if($_ eq ';');
     $_ =~ s/\|/; /g;
     $_ =~ s/\s(>)/ ; Writen /g;
