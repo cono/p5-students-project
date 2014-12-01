@@ -1,0 +1,133 @@
+<html>
+<head>
+<title>Upload your results</title>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.cookie/1.3.1/jquery.cookie.js"></script>
+<script type="text/javascript">
+    function _error( jq, st, er ) {
+	alert("Can't make a request: " + st);
+    }
+
+    $(document).ready(function() {
+	$.ajax({
+	    url: "/user_list",
+	    success: function( data ) {
+		var sel = $('#user_list');
+		sel.empty();
+		sel.append(
+		    $('<option></option>')
+		    	.attr('value', '')
+		    	.text('Choose your name')
+		);
+	    	for (var i = 0; i < data.length; ++i) {
+		    var u = data[i];
+		    sel.append($('<option></option>')
+		    	.attr('value', u.name)
+			.text(u.first_name +' '+ u.last_name)
+		    );
+		}
+		sel.val($.cookie('user'));
+
+		sel.on('change', function ( event ) {
+		    $.cookie('user', $(this).val(),{
+			path: '/',
+			expires: 30
+		    });
+		});
+
+		$('#main_form input[name="script"]').on('change', function( event ) {
+		    var formData = new FormData($('#main_form')[0]);
+		    var scr = $(this);
+
+		    $.ajax({
+			url: '/upload',
+			type: 'POST',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function ( data ) {
+			    if (data.error) {
+			        alert("Error: " + data.error);
+			    } else {
+				alert("File successfully loaded");
+			    }
+			    scr.val("");
+			},
+			error: _error
+		    });
+		});
+
+		$('#get_password').on('click', function( event ) {
+		    event.preventDefault();
+		    if ( !$('#user_list').val() ) {
+		    	alert("Please, choose your name");
+		    	return;
+		    }
+
+		    $.ajax({
+			url: '/get_password',
+			data: $('#main_form').serialize(),
+			type: 'POST',
+			success: function ( data ) {
+			    if (data.status == 'ok') {
+				alert("Email has been sent. Please check your mailbox.");
+			    } else {
+			        alert("Error");
+			    }
+			},
+			error: _error
+		    });
+		});
+	    },
+	    error: _error
+	});
+    });
+</script>
+<style>
+#main_form > div { clear: left }
+#main_form > div > div:first-child { width: 100px; float: left }
+</style>
+</head>
+<body bgcolor="#fff">
+<div>
+    <form id="main_form" enctype="multipart/form-data">
+	<div>
+	    <div>User:</div>
+	    <div>
+		<select id="user_list" name="user"><option>Loading...</option></select>
+		<input id="get_password" type="button" value="Get Password" />
+	    </div>
+	</div>
+	<div>
+	    <div>Password:</div>
+	    <div>
+		<input type="password" name="password" />
+	    </div>
+	</div>
+	<div>
+	    <div>Task:</div>
+	    <div>
+		<select name="task">
+		    <option value="00">00</option>
+		    <option value="01">01</option>
+		    <option value="02">02</option>
+		    <option value="03">03</option>
+		    <option value="04">04</option>
+		    <option value="05">05</option>
+		    <option value="06">06</option>
+		    <option value="07">07</option>
+		    <option value="08">08</option>
+		    <option value="09">09</option>
+		</select>
+	    </div>
+	</div>
+	<div>
+	    <div>File:</div>
+	    <div><input type="file" name="script" id="file1" /></div>
+	</div>
+    </form>
+</div>
+<div style="text-align:right;color:#cbcbcb"><hr/>&copy;&nbsp;cono</div>
+</body>
+</html>
